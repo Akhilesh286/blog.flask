@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sign-in.css') }}">
+{% endblock %}
+
+{% block body %}
+
+
+    <section>
+        <dvi class="main">
+            <div class="img">
+                <img src="{{ url_for('static', filename='images/login.png') }}" alt="">
+                <div>
+                    <h1>SingUP</h1>
+                </div>
+            </div>
+            <div class="cnt">
+                <div class="cnt-txt">
+                    <h1>Welcome</h1>
+                    <h4>Let's log you in quickly</h4>
+                </div>
+                <div class="cnt-inp">
+                    <div>
+                        <input style="width: 34.5%;" type="text" name="firstname" id="firstname" placeholder="First Name">
+                        <input style="width: 34.5%;" type="text" name="lastname" id="lastname" placeholder="Last Name">
+                    
+                    </div>
+                    <input type="email" name="email" id="email" placeholder="Enter Your Email">
+                    <input style="margin-top: 2rem;" type="password" name="password" id="password" placeholder="Enter Your Password">
+                    <input type="password" name="repassword" id="repassword" placeholder="Re-Enter Your Password">
+                
+                </div>
+                <div class="cnt-btn" style="display: flex;justify-content: space-between; width: 70%;margin-top: 2rem;">
+                    <button>SingUP</button>
+                    <p>Alrady have an account <span>?</span><br><a href="/sign-in">sign-in</a></p>
+                </div>
+            </div>
+        </dvi>
+    </section>
+
+
+
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% endblock %}
+
+{% endblock %}

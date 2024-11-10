@@ -1,0 +1,39 @@
+<style>
+
+nav {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+.foot-nav {
+    background-color: var(--bg);
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    padding: .5rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    gap: 1.5rem;
+    border: var(--border) solid 2px;
+    border-radius: 15px;
+}
+nav img {
+    width: 2.5rem;
+}
+
+
+</style>
+
+
+<footer>
+    <nav>
+        <div class="foot-nav">
+            <a href="/"><img src="{{ url_for('static',filename='icons/home.svg')}}" alt="" srcset=""></a>
+            <a href="/search"><img src="{{ url_for('static',filename='icons/search.svg')}}" alt="" srcset=""></a>
+            <a href="/create"><img src="{{ url_for('static',filename='icons/add_circle.svg')}}" alt="" srcset=""></a>
+            <a href="/"><img src="{{ url_for('static',filename='icons/trending_up.svg')}}" alt="" srcset=""></a>
+            <a href="/profile"><img src="{{ url_for('static',filename='images/prf.jpeg')}}" alt="" srcset="" style="border-radius: 50%;"></a>
+        </div>
+    </nav>
+</footer>

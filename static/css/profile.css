@@ -1,0 +1,119 @@
+@import url(style.css);
+:root {
+    --bg:#272727;
+    --border:#38583e;
+    --txt-dark:#070e08;
+    --txt-light:#ffffff;
+    --txt-primary:#8d8d8d;
+    --txt-secondary:#5cba6c;
+    --btn-primary:#6eeb83;
+}
+
+.sett {
+    width: 30%;
+    /* height: 100vh; */
+    border: var(--border) solid 2px;
+    border-radius: 10px;
+    border-bottom: none;
+
+}
+
+.top {
+    display: flex;
+    gap: 2rem;
+}
+.top div{
+    border-bottom: var(--border) 5px solid;
+    padding: 1rem;
+    padding-bottom: 0;
+}
+.top div:hover {
+    background-color: var(--border);
+}
+
+.post {
+    width: 80%;
+    height: 100vh;
+    border: var(--border) solid 2px;
+    border-radius: 10px;
+    border-bottom: none;
+    border-right: none;
+
+}
+
+
+.cnt {
+    border: var(--txt-dark) 2px solid;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+}
+.cnt h3{
+    color: var(--btn-primary);
+    font-family: "DM Serif Display",serif;
+}
+.cnt h6 {
+    color: var(--txt-primary);
+}
+.prf-inp {
+    text-align: center;
+}
+.prf-inp input {
+    padding: .5rem;
+    margin: .5rem;
+    width: 80%;
+    background-color: var(--bg);
+    border: var(--border) 3px solid;
+    color: var(--txt-light);
+    border-radius: 5px;
+}
+.prf-inp input:focus {
+    border-color: var(--border); /* Change border color */
+    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+    /* background-color: #f0f8ff; Optional: change background color */
+    outline: none; /* Remove default outline */
+}
+.prf-inp textarea {
+    padding: .5rem;
+    margin: .5rem;
+    width: 80%;
+    background-color: var(--bg);
+    border: var(--border) 3px solid;
+    color: var(--txt-light);
+    border-radius: 5px;
+
+}
+.prf-inp textarea:focus {
+    border-color: var(--border); /* Change border color */
+    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+    /* background-color: #f0f8ff; Optional: change background color */
+    outline: none; /* Remove default outline */
+}
+.prf-inp button {
+    color: var(--txt-light);
+    background-color: var(--bg);
+    border: var(--border) 2px solid;
+    width: 80%;
+    margin: 10%;
+    margin-top: 0;
+    height: 3rem;
+    font-size: 1rem;
+    font-family: "Lexend Deca", sans-serif;
+}
+.prf-inp button:hover {
+    background-color: var(--txt-secondary);
+    border: var(--border) 2px solid;
+    color: var(--txt-dark);
+}
+.prf-inp button:focus{
+    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+    outline: none;
+    border: none;
+}
+.prf-inp button:active{
+    border: none;
+    outline: none;
+    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+
+
+}

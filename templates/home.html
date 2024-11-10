@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block body %}
+
+{% include 'nav.html' %}
+
+
+<section style="margin-top: 5rem;">
+    <div style="margin-left: 20%;margin-right: 20%;">
+        <div class="top">
+            <div>Latest</div>
+            <div>Populer</div>
+            <div>Oldest</div>
+        </div>
+        <div class="cnt">
+            <div class="cnt-tit">
+                <h1>Lorem, ipsum dolor sit amet </h1>
+                <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quibusdam eius dicta, eos voluptate repellendus ea quidem. Debitis impedit at nesciunt. Nulla ipsam eligendi eveniet architecto laudantium perferendis dicta commodi!</h5>
+            </div>
+            <div class="cnt-usr">
+                <img src="{{ url_for('static',filename='images/prf.jpeg')}}" alt="" srcset="">
+                <p>name</p >
+            </div>
+        </div>
+        <div>
+            <div class="cnt">
+                <div class="cnt-tit">
+                    <h1>Lorem, ipsum dolor sit amet </h1>
+                    <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quibusdam eius dicta, eos voluptate repellendus ea quidem. Debitis impedit at nesciunt. Nulla ipsam eligendi eveniet architecto laudantium perferendis dicta commodi!</h5>
+                </div>
+                <div class="cnt-usr">
+                    <img src="{{ url_for('static',filename='images/prf.jpeg')}}" alt="" srcset="">
+                    <p>name</p >
+                </div>
+            </div>
+            <div class="cnt">
+                <div class="cnt-tit">
+                    <h1>Lorem, ipsum dolor sit amet </h1>
+                    <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quibusdam eius dicta, eos voluptate repellendus ea quidem. Debitis impedit at nesciunt. Nulla ipsam eligendi eveniet architecto laudantium perferendis dicta commodi!</h5>
+                </div>
+                <div class="cnt-usr">
+                    <img src="{{ url_for('static',filename='images/prf.jpeg')}}" alt="" srcset="">
+                    <p>name</p >
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    {% block scripts %}
+    {% endblock %}
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block body %}
+    
+    {% include 'nav.html' %}
+
+    <section>
+        <div class="" style="display: flex;gap: 5rem;">
+            <div class="sett">
+                <div class="prf-pic">
+                    <img src="{{ url_for('static',filename='images/prf.jpeg')}}" alt="" srcset="" style="width: 80%;height: auto;margin: 10%;border-radius: 50%;">
+                </div>
+                <div class="prf-dts">
+                    <div class="prf-inp">
+                        <input style="" type="text" name="email" id="email" placeholder="Enter Your Email">
+                        <textarea id="bio" name="bio" rows="5" cols="30" placeholder="Tell us about yourself..."></textarea>
+                        <button type="submit">save</button>
+                    
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <div style="margin-left: 2rem; margin-right: 2rem;">
+                    <div class="top">
+                        <div>Latest</div>
+                        <div>Populer</div>
+                        <div>Oldest</div>
+                    </div>
+                    <div class="cnt">
+                        <div class="cnt-tit">
+                            <h3>Lorem, ipsum dolor sit amet </h3>
+                            <h6>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quibusdam eius dicta, eos voluptate repellendus ea quidem. Debitis impedit at nesciunt. Nulla ipsam eligendi eveniet architecto laudantium perferendis dicta commodi!</h6>
+                        </div>
+                        <div class="cnt-dts">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% block scripts %}
+        <!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
+    {% endblock %}
+
+{% endblock %}

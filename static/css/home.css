@@ -1,0 +1,42 @@
+@import url(style.css);
+
+.top {
+    display: flex;
+    gap: 2rem;
+}
+.top div{
+    border-bottom: var(--border) 5px solid;
+    padding: 1rem;
+    padding-bottom: 0;
+}
+.top div:hover {
+    background-color: var(--border);
+}
+
+.cnt {
+    border: var(--txt-dark) 2px solid;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+}
+.cnt h1{
+    color: var(--btn-primary);
+    font-family: "DM Serif Display",serif;
+}
+.cnt h5 {
+    color: var(--txt-primary);
+}
+.cnt-usr {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+.cnt-usr img {
+    width: 48px;
+    border-radius: 50%;
+}
+.cnt-usr p {
+    text-align: center;
+    font-size: large;
+    margin: 0;
+}

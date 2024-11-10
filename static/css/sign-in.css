@@ -1,0 +1,97 @@
+@import url(style.css);
+
+body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--txt-light);
+}
+
+.main {
+    display: flex;
+}
+
+.img {
+    width: 30%;
+    height: 100vh;
+    position: relative;
+    align-items: center;
+}
+.img img {
+    height: 100%;
+}
+.img h1 {
+    font-size: 3rem;
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: rotate(-90deg);
+    font-family: "Lexend Deca", sans-serif;
+}
+
+.cnt {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.cnt h1 {
+    font-family: "DM Serif Display", serif;
+    color: var(--txt-light);
+}
+.cnt h4 {
+    font-family: "Lexend Deca", sans-serif;
+    color: var(--txt-primary);
+}
+.cnt input {
+    padding: 1rem;
+    width: 70%;
+    margin-top: .5rem;
+    background-color: var(--bg);
+    border: var(--border) 3px solid;
+    color: var(--txt-light);
+    border-radius: 5px;
+}
+.cnt input:focus {
+    border-color: var(--border); /* Change border color */
+    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+    /* background-color: #f0f8ff; Optional: change background color */
+    outline: none; /* Remove default outline */
+}
+.cnt button {
+    color: var(--txt-dark);
+    background-color: var(--btn-primary);
+    border: none;
+    width: 25%;
+    height: 3rem;
+    font-size: 1.5rem;
+    font-family: "Lexend Deca", sans-serif;
+}
+.cnt button:hover {
+    background-color: var(--bg);
+    border: var(--border) 2px solid;
+    color: var(--txt-light);
+}
+.cnt button:focus{
+    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+    outline: none;
+    border: none;
+}
+.cnt button:active{
+    border: none;
+    outline: none;
+    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+
+
+}
+.cnt p {
+    font-family: "Lexend Deca", sans-serif;
+}
+.cnt p span {
+    color: var(--txt-secondary);
+}
+.cnt a {
+    color: var(--txt-secondary);
+}
