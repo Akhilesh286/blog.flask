@@ -10,46 +10,30 @@
 
 {% include 'nav.html' %}
 
-
+<!-- <h1>{{is_user}}</h1>
+<h1></h1>
+  -->
 <section style="margin-top: 5rem;">
     <div style="margin-left: 20%;margin-right: 20%;">
         <div class="top">
             <div>Latest</div>
-            <div>Populer</div>
             <div>Oldest</div>
         </div>
-        <div class="cnt">
-            <div class="cnt-tit">
-                <h1>Lorem, ipsum dolor sit amet </h1>
-                <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quibusdam eius dicta, eos voluptate repellendus ea quidem. Debitis impedit at nesciunt. Nulla ipsam eligendi eveniet architecto laudantium perferendis dicta commodi!</h5>
-            </div>
-            <div class="cnt-usr">
-                <img src="{{ url_for('static',filename='images/prf.jpeg')}}" alt="" srcset="">
-                <p>name</p >
-            </div>
-        </div>
-        <div>
+        {% for post in posts %}
+        <a href="/content/{{post.id}}" style="all: unset;">
             <div class="cnt">
                 <div class="cnt-tit">
-                    <h1>Lorem, ipsum dolor sit amet </h1>
-                    <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quibusdam eius dicta, eos voluptate repellendus ea quidem. Debitis impedit at nesciunt. Nulla ipsam eligendi eveniet architecto laudantium perferendis dicta commodi!</h5>
+                    <h1>{{post.title}}</h1>
+                    <h5>{{post.description}}</h5>
                 </div>
                 <div class="cnt-usr">
                     <img src="{{ url_for('static',filename='images/prf.jpeg')}}" alt="" srcset="">
-                    <p>name</p >
+                    <p>{{post.user_name}}</p >
                 </div>
             </div>
-            <div class="cnt">
-                <div class="cnt-tit">
-                    <h1>Lorem, ipsum dolor sit amet </h1>
-                    <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quibusdam eius dicta, eos voluptate repellendus ea quidem. Debitis impedit at nesciunt. Nulla ipsam eligendi eveniet architecto laudantium perferendis dicta commodi!</h5>
-                </div>
-                <div class="cnt-usr">
-                    <img src="{{ url_for('static',filename='images/prf.jpeg')}}" alt="" srcset="">
-                    <p>name</p >
-                </div>
-            </div>
-        </div>
+        </a>
+        {% endfor %}
+        
     </div>
 </section>
 

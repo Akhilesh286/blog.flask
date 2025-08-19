@@ -13,14 +13,37 @@
     <section>
         <div class="" style="display: flex;gap: 5rem;">
             <div class="sett">
-                <div class="prf-pic">
-                    <img src="{{ url_for('static',filename='images/prf.jpeg')}}" alt="" srcset="" style="width: 80%;height: auto;margin: 10%;border-radius: 50%;">
+                <div class="prf-pic" style="display: flex;justify-content: center;">
+                    
+                    {% if profile.pic %}
+                    <img src="{{ url_for('static', filename='upload/' ~ profile.pic) }}" alt="Profile Picture" style="object-fit: cover; aspect-ratio: 1/1; margin-top: 1rem; width: 50%; height: auto; border-radius: 50%;">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/prf.jpeg') }}" alt="Profile Picture" style="margin-top: 1rem; width: 50%; height: auto; border-radius: 50%;">
+                    {% endif %}
+                        
+                </div>
+                <div class="prf-dts">
                 </div>
                 <div class="prf-dts">
                     <div class="prf-inp">
-                        <input style="" type="text" name="email" id="email" placeholder="Enter Your Email">
-                        <textarea id="bio" name="bio" rows="5" cols="30" placeholder="Tell us about yourself..."></textarea>
-                        <button type="submit">save</button>
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <input type="file" name="pic" id="pic" style="display: none;">
+                        <input class="lock" disabled type="text" value="{{profile.firstname}}" name="firstname" placeholder="first name">
+                        <input class="lock" disabled type="text" value="{{profile.lastname}}" name="lastname" placeholder="last name">
+                        <select class="lock" disabled  name="gender">
+                            <option value="human">{{profile.gender}}</option>
+                            <option value="male">male</option>
+                            <option value="female">female</option>
+                        </select>
+                        <input class="lock" disabled type="text" value="{{profile.phone}}" name="phone" placeholder="Phone">
+                        <textarea class="lock" disabled id="bio" value="{{profile.bio}}" name="bio"  rows="4" placeholder="Tell us about yourself..."></textarea>
+                        <input class="lock" disabled type="text" value="{{profile.website}}" name="website" placeholder="website">                        
+                        <button type="submit" style="display: none;" id="submit">submit</button>
+                    </form>
+                        <button id="edit">Edit</button>
+                        <a href="/logout">
+                            <button style="background-color: transparent;border: black 3px solid;color: red;">Logout</button>
+                        </a>
                     
                     </div>
                 </div>
@@ -32,21 +55,31 @@
                         <div>Populer</div>
                         <div>Oldest</div>
                     </div>
+                    {% for post in posts %}
                     <div class="cnt">
                         <div class="cnt-tit">
-                            <h3>Lorem, ipsum dolor sit amet </h3>
-                            <h6>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quibusdam eius dicta, eos voluptate repellendus ea quidem. Debitis impedit at nesciunt. Nulla ipsam eligendi eveniet architecto laudantium perferendis dicta commodi!</h6>
+                            <h3>{{post.title}}</h3>
+                            <h6>{{post.description}}</h6>
+                        </div>
+                    <div style="display: flex;justify-content: space-between;">
+                        <div>
+                            <a style="font-size: 12px;padding: 5px; border: 2px solid black;background-color: transparent;color: aqua;">update</a>
+                            <a style="font-size: 12px;padding: 5px; border: 2px solid black;background-color: transparent;color: red;">delete</a>
                         </div>
                         <div class="cnt-dts">
+                            <p>{{post.created_at.strftime("%Y-%m-%d")}}</p>
+                            <!-- <p>{{post.created_at.strftime("%Y-%m-%d")}}</p> -->
                         </div>
                     </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
     </section>
 
     {% block scripts %}
-        <!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
+        <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
     {% endblock %}
 
 {% endblock %}
