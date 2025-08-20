@@ -51,7 +51,7 @@ def unauthenticated_only(f):
 @app.route('/')
 @login_required
 def index():
-    is_user = current_user.is_authenticated
+    is_user = current_user
     posts = Post.query.all()
     print(posts)
     return render_template('home.html',is_user=is_user,posts=posts)
@@ -131,7 +131,7 @@ def profile():
             pic.save(os.path.join(UPLOAD_FOLDER, pic_name))
         except:
             print("error \n\n\n")
-    is_user = current_user.is_authenticated
+    is_user = current_user
     posts = current_user.posts
     return render_template('profile.html',is_user=is_user,posts=posts, profile=profile)
 
@@ -144,7 +144,7 @@ def create():
         description = request.form["description"]
         content = request.form["content"]
 
-        post = Post(title=title,description=description,content=content,user_id=current_user.id,user_name=current_user.username)
+        post = Post(title=title,description=description,content=content,user_id=current_user.id)
         db.session.add(post)
         db.session.commit()
     

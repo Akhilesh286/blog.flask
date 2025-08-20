@@ -34,6 +34,8 @@
 .cnt-usr img {
     width: 48px;
     border-radius: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
 }
 .cnt-usr p {
     text-align: center;

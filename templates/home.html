@@ -27,8 +27,14 @@
                     <h5>{{post.description}}</h5>
                 </div>
                 <div class="cnt-usr">
-                    <img src="{{ url_for('static',filename='images/prf.jpeg')}}" alt="" srcset="">
-                    <p>{{post.user_name}}</p >
+                    
+                    {% if post.user.profile.pic %}
+                    <img src="{{ url_for('static',filename='upload/'+post.user.profile.pic )}}" alt="" srcset="">
+                    {% else %}
+                    <img src="{{ url_for('static',filename='images/prf.jpeg' )}}" alt="" srcset="">
+                    {% endif %}
+                        
+                    <p>{{post.user.username}}</p >
                 </div>
             </div>
         </a>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
+{% endblock %}
+
+{% block body %}
+
+
+    <section>
+        <dvi class="container">
+            <div class="cnt">
+                <div class="cnt-txt" style="text-align: center;">
+                    <h1>Create New Blog</h1>
+                    <h4>Share Your Thoughts and Idea's and Inspare People...</h4>
+                </div>
+                <form action="/create" method="post">
+                    <div class="cnt-inp">
+                        <input style="width: 50%;" type="text" name="title" id="username" placeholder="Title">
+                        <textarea style="width: 75%;" type="email" name="description" placeholder="Description" rows="2"></textarea>
+                        <textarea style="width: 75%;" type="email" name="content" placeholder="Content " rows="6"></textarea>
+                        <button type="submit">Save</button>
+                    </div>
+                </form>
+            </div>
+        </dvi>
+    </section>
+
+
+
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% endblock %}
+
+{% endblock %}
