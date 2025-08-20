@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}search{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+{% endblock %}
+
+{% block body %}
+
+{% include 'nav.html' %}
+
+<div class="search-bar">
+    <form action="/search" method="get">
+        <input type="text" name="title" id="search" placeholder="search..." >
+        <button type="submit">
+            <img src="{{ url_for('static',filename='icons/search.svg')}}" alt=""> search
+        </button>
+    </form>
+</div>
+
+<div class="content">
+    <div style="margin-left: 2rem; margin-right: 2rem;">
+        {% for post in posts %}
+            <div class="cnt">
+            <a href="/content/{{post.id}}" style="all: unset;">
+                <div class="cnt-tit">
+                    <h1>{{post.title}}</h1>
+                    <h5>{{post.description}}</h5>
+                </div>
+            </a>
+            </div>    
+        {% endfor %}
+    </div>
+</div>
+
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}
+
+{% endblock %}
+

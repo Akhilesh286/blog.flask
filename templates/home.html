@@ -16,8 +16,26 @@
 <section style="margin-top: 5rem;">
     <div style="margin-left: 20%;margin-right: 20%;">
         <div class="top">
-            <div>Latest</div>
-            <div>Oldest</div>
+        <form id="listBy" action="" method="get">
+            
+            <input type="text" value="latest" name="getBy" id="getBy" hidden>
+            {% if isLatest %}
+            <button class="active" id="getLatest" type="submit">Latest</button>
+            {% else %}
+            <button id="getLatest" type="submit">Latest</button>
+            {% endif %}
+                
+        </form>
+        <form id="listBy" action="" method="get">
+            <input type="text" value="oldest" name="getBy" id="getBy" hidden>
+            
+            {% if not isLatest %}
+            <button class="active" id="getOldest" type="submit">Oldest</button>
+            {% else %}
+            <button id="getOldest" type="submit">Oldest</button>
+            {% endif %}
+                
+        </form>
         </div>
         {% for post in posts %}
         <a href="/content/{{post.id}}" style="all: unset;">

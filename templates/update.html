@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}update{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <section>
+        <dvi class="container">
+            <div class="cnt">
+                <div class="cnt-txt" style="text-align: center;">
+                    <h1>Update</h1>
+                </div>
+                <form action="" method="post">
+                    <div class="cnt-inp">
+                        <input value="{{post.title}}" style="width: 50%;" type="text" name="title" id="username" placeholder="Title">
+                        <textarea style="width: 75%;" name="description" placeholder="Description" rows="2">{{post.description}}</textarea>
+                        <textarea style="width: 75%;" name="content" placeholder="Content " rows="6">{{post.content}}</textarea>
+                        <button type="submit">Update</button>
+                    </div>
+                </form>
+            </div>
+        </dvi>
+    </section>
+
+
+
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% endblock %}
+
+{% endblock %}

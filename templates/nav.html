@@ -35,7 +35,7 @@ nav img {
     <nav>
         <div class="foot-nav">
             <a href="/"><img src="{{ url_for('static',filename='icons/home.svg')}}" alt="" srcset=""></a>
-            <a href=""><img src="{{ url_for('static',filename='icons/search.svg')}}" alt="" srcset=""></a>
+            <a href="/search"><img src="{{ url_for('static',filename='icons/search.svg')}}" alt="" srcset=""></a>
             <a href="/create"><img src="{{ url_for('static',filename='icons/add_circle.svg')}}" alt="" srcset=""></a>
             {% if is_user.profile.pic %}
             <a href="/profile"><img class="profile-pic" src="{{ url_for('static',filename='upload/'+is_user.profile.pic )}}" alt="" srcset="" style="border-radius: 50%;"></a>

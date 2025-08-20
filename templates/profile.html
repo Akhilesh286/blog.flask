@@ -50,11 +50,6 @@
             </div>
             <div class="post">
                 <div style="margin-left: 2rem; margin-right: 2rem;">
-                    <div class="top">
-                        <div>Latest</div>
-                        <div>Populer</div>
-                        <div>Oldest</div>
-                    </div>
                     {% for post in posts %}
                     <div class="cnt">
                         <div class="cnt-tit">
@@ -63,8 +58,8 @@
                         </div>
                     <div style="display: flex;justify-content: space-between;">
                         <div>
-                            <a style="font-size: 12px;padding: 5px; border: 2px solid black;background-color: transparent;color: aqua;">update</a>
-                            <a style="font-size: 12px;padding: 5px; border: 2px solid black;background-color: transparent;color: red;">delete</a>
+                            <a href="/update/{{post.id}}" style="font-size: 12px;padding: 5px; border: 2px solid black;background-color: transparent;color: aqua;">update</a>
+                            <a href="/delete/{{post.id}}" style="font-size: 12px;padding: 5px; border: 2px solid black;background-color: transparent;color: red;">delete</a>
                         </div>
                         <div class="cnt-dts">
                             <p>{{post.created_at.strftime("%Y-%m-%d")}}</p>

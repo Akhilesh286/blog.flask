@@ -4,12 +4,19 @@
     display: flex;
     gap: 2rem;
 }
-.top div{
-    border-bottom: var(--border) 5px solid;
+.top button{
     padding: 1rem;
     padding-bottom: 0;
+    border: none;
+    color: white;
+    border-bottom: var(--border) 5px solid;
+    background-color: transparent;
 }
-.top div:hover {
+.top button:hover {
+    background-color: var(--border);
+}
+
+.top .active {
     background-color: var(--border);
 }
 

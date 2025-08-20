@@ -48,14 +48,23 @@ def unauthenticated_only(f):
     return decorated_function
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 @login_required
 def index():
     is_user = current_user
-    posts = Post.query.all()
-    print(posts)
-    return render_template('home.html',is_user=is_user,posts=posts)
-
+    get_by = request.args.get('getBy')
+    is_latest = True
+    posts = None
+    if get_by == 'latest':
+        posts = Post.query.order_by(Post.created_at.desc()).limit(50).all()
+        is_latest = True
+    elif get_by == 'oldest':
+        posts = Post.query.order_by(Post.created_at.asc()).limit(50).all()
+        is_latest = False
+    else:
+        posts = Post.query.order_by(Post.created_at.desc()).limit(50).all()
+    return render_template('home.html',is_user=is_user,posts=posts,isLatest=is_latest)
+        
 @app.route('/sign-in',methods=["GET","POST"])
 @unauthenticated_only
 def sign_in():
@@ -152,9 +161,39 @@ def create():
     return render_template('create.html',is_user=is_user)
 
 @app.route('/content/<int:id>')
-def save(id):
+def content(id):
     post = Post.query.get(id)
     return render_template('content.html',post=post)
+
+@app.route('/search', methods=['GET'])
+def search():
+    is_user = current_user
+    search_term = request.args.get('title')
+    if search_term:
+        results = Post.query.filter(Post.title.ilike(f"%{search_term}%")).all()
+        return render_template('search.html', posts=results, is_user=is_user)
+
+    return render_template('search.html', is_user=is_user)
+
+@app.route('/update/<int:id>', methods=['GET', 'POST'])
+def update(id):
+    post = Post.query.get(id)
+    if request.method == "POST":
+        post.title = request.form["title"]
+        post.description = request.form["description"]
+        post.content = request.form["content"]
+
+        db.session.commit()    
+        return redirect('/dashboard')
+    return render_template('update.html',post=post)
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    post = Post.query.get(id)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect('/dashboard')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
