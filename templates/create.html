@@ -3,31 +3,29 @@
 {% block title %}Home Page{% endblock %}
 
 {% block head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/dracula.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/xml/xml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/create-topbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/md-editor.css') }}">
 {% endblock %}
 
 {% block body %}
 <section class="main-body">
     <div class="top-nav-bar">
-        <nav id="topbar-mini" class="top-nav-mini">
-            <ul>
-                <li></li>
-                <li>hellow</li>
-                <li>hellow</li>
-                <li>hellow</li>
-            </ul>
-        </nav>
+        {% include 'create-menu.html' %}
         <div id="topbar-max" class="topbar-hide  top-nav-max">
             {% include 'create-topbar.html' %}
         </div>
         <button id="toggleTopbar" class="toggle-topbar">show</button>
     </div>
     <!-- Main Content -->
-    <main class="content">
-      <h1>Main Content Area</h1>
-      <p>Your app content goes here.</p>
-      
+    <main>
+        {% include 'md-editor.html' %}
     </main>
 </section>
 
