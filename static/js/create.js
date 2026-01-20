@@ -18,7 +18,7 @@ const cm = CodeMirror.fromTextArea(document.getElementById("editor"), {
   mode: "markdown",
   lineNumbers: true,
   lineWrapping: true,
-  theme: "dracula"
+  theme: "material-darker"
 });
 
 const preview = document.getElementById("preview");
@@ -85,3 +85,6 @@ document.getElementById("h6").addEventListener("click", () => {
     cm.replaceSelection("###### ");
     cm.focus();
 });
+
+
+// Submit

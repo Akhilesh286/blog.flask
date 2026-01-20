@@ -63,6 +63,10 @@
     --font-weight-body:     400; /* regular */
     --font-weight-caption:  400; /* regular */
     --font-weight-disabled: 400; /* regular */
+    
+    /* ========== FONT WEIGHTS ========== */
+    --font-family-primary: "Lexend Deca", sans-serif;
+    --font-family-secondary: "DM Serif Display",serif;
 
     /* ========== SPACE  ========== */
     --space-base: 16px;

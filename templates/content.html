@@ -8,27 +8,51 @@
 
 {% block body %}
     
-    {% include 'nav.html' %}
-
-    <section>
-        <div class="container" style="display: flex;gap: 5rem;">
-            <div class="post">
-                <div style="margin-left: 2rem; margin-right: 2rem;">
-                    <div class="cnt">
-                        <div class="cnt-tit">
-                            <h3>{{post.title}}</h3>
-                            <h6>{{post.description}}</h6>
-                            <h6 style="color: black;">{{post.created_at.strftime("%Y-%m-%d")}}</h6>
-                            <p style="margin-left: 5rem;margin-right: 5rem;">{{post.content}}</p>
+    <div id="comment-box" class="comment-box hide-comment">
+    <div class="resize-handle"></div>
+    </div>
+    <section class="main-body">
+        <div class="container">
+            <div class="cnt">
+                <div class="cnt-tit">
+                    <h2>{{post.title}}</h2>
+                    <h4>{{post.description}}</h5>
+                    <h6>{{post.created_at.strftime("%Y-%m-%d")}}</h6>
+                </div>
+                <div class="author-action">
+                    <div class="action-row">
+                        <div class="comment-btn action-btns">
+                            <button id="toggle-comment">comment</button>
+                        </div>
+                        <div class="save action-btns">
+                            <button>save</button>
+                        </div>
+                        <div class="like action-btns">
+                            <button>like</button>
+                        </div>
+                    </div>
+                    <div class="author-data">
+                        <img class="profile-pic"
+                            {% if is_user.profile.pic %}
+                            src="{{ url_for('media', filename='upload/' ~ post.author.profile.pic) }}" 
+                            {% else %}
+                            src="{{ url_for('static',filename='images/prf.jpeg')}}" 
+                            {% endif %}
+                            alt=""
+                        >
+                        <p>{{post.author.username}}</p >
+                        <div class="follow-btn action-btns">
+                            <button>follow</button>
                         </div>
                     </div>
                 </div>
+                <div class="content">{{content|safe}}</div>
             </div>
         </div>
     </section>
 
     {% block scripts %}
-        <!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
+        <script src="{{ url_for('static', filename='js/content.js') }}"></script>
     {% endblock %}
 
 {% endblock %}

@@ -1,0 +1,21 @@
+{% for post in posts %}
+<a href="/post/{{post.slug}}" style="all: unset;">
+    <div class="cnt">
+        <div class="cnt-tit">
+            <h1>{{post.title}}</h1>
+            <h5>{{post.description}}</h5>
+        </div>
+        
+        <div class="cnt-usr">
+        <img class="profile-pic"
+        {% if is_user.profile.pic %}
+            src="{{ url_for('media', filename='upload/' ~ post.author.profile.pic) }}" 
+            {% else %}
+            src="{{ url_for('static',filename='images/prf.jpeg')}}" 
+            {% endif %}
+            alt="" srcset="" style="border-radius: 50%;">
+            <p>{{post.author.username}}</p >
+        </div>
+    </div>
+</a>
+{% endfor %}

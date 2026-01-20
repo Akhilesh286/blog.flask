@@ -11,6 +11,7 @@ dependencies = [
     "flask-login>=0.6.3",
     "flask-migrate>=4.1.0",
     "flask-sqlalchemy>=3.1.1",
+    "markdown>=3.10",
     "psycopg2-binary>=2.9.11",
     "python-dotenv>=1.2.1",
 ]

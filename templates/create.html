@@ -4,7 +4,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/dracula.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/material-darker.css">
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/markdown/markdown.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/xml/xml.js"></script>
@@ -16,17 +16,22 @@
 
 {% block body %}
 <section class="main-body">
-    <div class="top-nav-bar">
-        {% include 'create-menu.html' %}
-        <div id="topbar-max" class="topbar-hide  top-nav-max">
-            {% include 'create-topbar.html' %}
+    <form action="/create" method="post">
+        <div class="top-nav-bar">
+            <nav id="topbar-mini" class="top-nav-mini">
+                {% include 'create-menu.html' %}
+            </nav>
+            <div id="topbar-max" class="topbar-hide top-nav-max">
+                {% include 'create-topbar.html' %}
+            </div>
+            <button type="button" id="toggleTopbar" class="topbar-btn" >show</button>
+            <button type="button" id="backBtn" class="topbar-btn" >Back</button>
         </div>
-        <button id="toggleTopbar" class="toggle-topbar">show</button>
-    </div>
-    <!-- Main Content -->
-    <main>
-        {% include 'md-editor.html' %}
-    </main>
+        <!-- Main Content -->
+        <main>
+            {% include 'md-editor.html' %}
+        </main>
+    </form>
 </section>
 
 

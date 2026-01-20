@@ -21,31 +21,31 @@
 }
 
 .cnt {
-    border: var(--txt-dark) 2px solid;
-    padding: 1rem;
-    border-radius: 10px;
-    margin-top: 2rem;
+    border: var(--border-primary) 2px solid;
+    padding: var(--space-md);
+    border-radius: var(--radius-xl);
+    margin-top: var(--space-xl);
+    cursor: pointer;
 }
 .cnt h1{
-    color: var(--btn-primary);
-    font-family: "DM Serif Display",serif;
+    color: var(--text-title);
+    font-family: var(--font-family-secondary);
 }
 .cnt h5 {
-    color: var(--txt-primary);
+    color: var(--text-subtitle);
 }
 .cnt-usr {
     display: flex;
-    gap: 1rem;
+    gap: var(--gap-md);
     align-items: center;
 }
-.cnt-usr img {
+.profile-pic {
     width: 48px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     aspect-ratio: 1;
     object-fit: cover;
 }
 .cnt-usr p {
     text-align: center;
-    font-size: large;
     margin: 0;
 }

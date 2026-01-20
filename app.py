@@ -8,12 +8,14 @@ from flask_login import (
     current_user,
     login_required,
 )
+from sqlalchemy.orm import joinedload
 from werkzeug.utils import secure_filename
 from functools import wraps
 from datetime import datetime
 import os
 import uuid
 import re
+from markdown import markdown
 
 from models import db, User, Post, Profile, PostStatus
 
@@ -104,23 +106,54 @@ def profile_pic():
 
     return send_file(image_path)
 
+def post_status_converter(status):
+    if status == "draft":
+        return PostStatus.draft
+    elif status == "archived":
+        return PostStatus.archived
+    elif status == "published":
+        return PostStatus.published
+    else:
+        return PostStatus.archived
+    
 
 # -------------------------------------------------------------------
 # Routes
 # -------------------------------------------------------------------
 
+@app.get("/posts/load")
+@login_required
+def load_posts():
+    page = request.args.get("page", 1, type=int)
+    per_page = 10
+
+    posts = (
+        Post.query
+        .filter(Post.status == PostStatus.published)
+        .order_by(Post.created_at.desc())
+        .paginate(page=page, per_page=per_page, error_out=False)
+    )
+
+    return render_template(
+        "posts.html",
+        posts=posts.items
+    )
+
+
 @app.route("/")
 @login_required
 def index():
+    page = 1
+    per_page = 10
+
     posts = (
-        Post.query.filter(
-            Post.status == PostStatus.published
-        )
+        Post.query
+        .filter(Post.status == PostStatus.published)
         .order_by(Post.created_at.desc())
-        .limit(50)
-        .all()
+        .paginate(page=page, per_page=per_page, error_out=False)
     )
-    return render_template("home.html", posts=posts, is_user=current_user)
+
+    return render_template("home.html", posts=posts.items, is_user=current_user)
 
 @app.route("/test")
 def test():
@@ -244,7 +277,7 @@ def create():
             description=request.form.get("description"),
             content=request.form.get("content"),
             author_id=current_user.id,
-            status=PostStatus.published,
+            status=post_status_converter(request.form.get("status")),
             published_at=datetime.utcnow(),
         )
 
@@ -263,8 +296,11 @@ def content(slug):
     post = Post.query.filter_by(
         slug=slug, status=PostStatus.published
     ).first_or_404()
-
-    return render_template("content.html", post=post, is_user=current_user)
+    html_content = markdown(
+        post.content,
+        extensions=["fenced_code", "tables", "toc", "nl2br"]
+    ) if post.content else None
+    return render_template("content.html", post=post, is_user=current_user, content=html_content)
 
 
 # -------------------------------------------------------------------

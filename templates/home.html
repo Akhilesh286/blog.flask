@@ -10,58 +10,22 @@
 
 {% include 'nav.html' %}
 
-<!-- <h1>{{is_user}}</h1>
+<!-- <h1>{{is_author}}</h1>
 <h1></h1>
   -->
 <section style="margin-top: 5rem;">
     <div style="margin-left: 20%;margin-right: 20%;">
-        <div class="top">
-        <form id="listBy" action="" method="get">
-            
-            <input type="text" value="latest" name="getBy" id="getBy" hidden>
-            {% if isLatest %}
-            <button class="active" id="getLatest" type="submit">Latest</button>
-            {% else %}
-            <button id="getLatest" type="submit">Latest</button>
-            {% endif %}
-                
-        </form>
-        <form id="listBy" action="" method="get">
-            <input type="text" value="oldest" name="getBy" id="getBy" hidden>
-            
-            {% if not isLatest %}
-            <button class="active" id="getOldest" type="submit">Oldest</button>
-            {% else %}
-            <button id="getOldest" type="submit">Oldest</button>
-            {% endif %}
-                
-        </form>
+        <div id="post-container">
+            {% include "posts.html" %}
         </div>
-        {% for post in posts %}
-        <a href="/content/{{post.id}}" style="all: unset;">
-            <div class="cnt">
-                <div class="cnt-tit">
-                    <h1>{{post.title}}</h1>
-                    <h5>{{post.description}}</h5>
-                </div>
-                <div class="cnt-usr">
-                    
-                    {% if post.user.profile.pic %}
-                    <img src="{{ url_for('static',filename='upload/'+post.user.profile.pic )}}" alt="" srcset="">
-                    {% else %}
-                    <img src="{{ url_for('static',filename='images/prf.jpeg' )}}" alt="" srcset="">
-                    {% endif %}
-                        
-                    <p>{{post.user.username}}</p >
-                </div>
-            </div>
-        </a>
-        {% endfor %}
-        
+
+        <div id="loader" style="display:none;">Loading...</div>
+
     </div>
 </section>
 
     {% block scripts %}
+    <script src="{{ url_for('static', filename='js/home.js' ) }}"></script>
     {% endblock %}
 
 {% endblock %}

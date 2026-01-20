@@ -5,3 +5,9 @@ $(document).ready(function() {
         $('#myParagraph').toggle();
     });
 });
+
+
+// back button 
+document.getElementById("backBtn").addEventListener("click", () => {
+    window.history.back();
+});
