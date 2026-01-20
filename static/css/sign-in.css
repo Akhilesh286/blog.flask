@@ -50,13 +50,13 @@ body {
     width: 70%;
     margin-top: .5rem;
     background-color: var(--bg);
-    border: var(--border) 3px solid;
+    border: var(--border-primary) 3px solid;
     color: var(--txt-light);
     border-radius: 5px;
 }
 .cnt input:focus {
-    border-color: var(--border); /* Change border color */
-    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+    border-color: var(--border-hover); /* Change border color */
+    box-shadow: 0 0 8px var(--border-hover); /* Add shadow effect */
     /* background-color: #f0f8ff; Optional: change background color */
     outline: none; /* Remove default outline */
 }
@@ -71,18 +71,18 @@ body {
 }
 .cnt button:hover {
     background-color: var(--bg);
-    border: var(--border) 2px solid;
+    border: var(--border-hover) 2px solid;
     color: var(--txt-light);
 }
 .cnt button:focus{
-    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+    box-shadow: 0 0 8px var(--border-hover); /* Add shadow effect */
     outline: none;
     border: none;
 }
 .cnt button:active{
     border: none;
     outline: none;
-    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+    box-shadow: 0 0 8px var(--border-hover); /* Add shadow effect */
 
 
 }

@@ -1,199 +1,305 @@
-from flask import Flask, render_template,redirect,request,url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, redirect, request, url_for, abort, send_from_directory, send_file
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager,UserMixin,login_user,logout_user,current_user,login_required
-from models import db, User, Post, Profile
+from flask_login import (
+    LoginManager,
+    login_user,
+    logout_user,
+    current_user,
+    login_required,
+)
 from werkzeug.utils import secure_filename
-
 from functools import wraps
-
-import uuid 
+from datetime import datetime
 import os
+import uuid
+import re
 
+from models import db, User, Post, Profile, PostStatus
 
+# -------------------------------------------------------------------
+# App setup
+# -------------------------------------------------------------------
 
 app = Flask(__name__)
 
+app.config["SECRET_KEY"] = "hidden-gem"
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "postgresql+psycopg2://bloguser:strongpassword@localhost:5432/blogdb"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# Sql configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+UPLOAD_FOLDER = os.path.join(app.root_path, "media", "upload")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 db.init_app(app)
-migrate = Migrate(app,db)
-# os.makedirs(os.path.join(app.config["UPLOAD_IMAGE"]), exist_ok=True)
-# User management
-app.secret_key = 'hidden gem'
-login_manager = LoginManager()
-login_manager.login_view = 'sign_in'
-login_manager.init_app(app)
+migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
-UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'upload')
-# os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# -------------------------------------------------------------------
+# Login manager
+# -------------------------------------------------------------------
+
+login_manager = LoginManager()
+login_manager.login_view = "sign_in"
+login_manager.init_app(app)
 
 
 @login_manager.user_loader
-def load_usr(id):
-    return User.query.get(id)
+def load_user(user_id):
+    return db.session.get(User, int(user_id))
 
 
+# -------------------------------------------------------------------
+# Helpers
+# -------------------------------------------------------------------
 
 def unauthenticated_only(f):
     @wraps(f)
-    def decorated_function(*args, **kwargs):
+    def wrapper(*args, **kwargs):
         if current_user.is_authenticated:
-            return redirect(url_for('index'))  # or any other page
+            return redirect(url_for("index"))
         return f(*args, **kwargs)
-    return decorated_function
+
+    return wrapper
 
 
-@app.route('/', methods=['GET'])
+def generate_slug(title: str) -> str:
+    slug = re.sub(r"[^\w\s-]", "", title.lower())
+    slug = re.sub(r"[\s_-]+", "-", slug).strip("-")
+    unique = slug
+    counter = 1
+
+    while Post.query.filter_by(slug=unique).first():
+        unique = f"{slug}-{counter}"
+        counter += 1
+
+    return unique
+
+
+@app.route('/media/<path:filename>')
+def media(filename):
+    return send_from_directory('media', filename)
+
+# endpoint to get current profilepic
+@app.route("/api/profile-pic")
+def profile_pic():
+    DEFAULT_IMAGE = os.path.join("static", "images", "prf.jpeg")
+
+    # not logged in
+    if not current_user.is_authenticated:
+        return send_file(DEFAULT_IMAGE)
+
+    profile = getattr(current_user, "profile", None)
+
+    # no profile or no picture
+    if not profile or not profile.pic:
+        return send_file(DEFAULT_IMAGE)
+
+    image_path = os.path.join("media", "uploads", profile.pic)
+
+    # file missing on disk
+    if not os.path.exists(image_path):
+        return send_file(DEFAULT_IMAGE)
+
+    return send_file(image_path)
+
+
+# -------------------------------------------------------------------
+# Routes
+# -------------------------------------------------------------------
+
+@app.route("/")
 @login_required
 def index():
-    is_user = current_user
-    get_by = request.args.get('getBy')
-    is_latest = True
-    posts = None
-    if get_by == 'latest':
-        posts = Post.query.order_by(Post.created_at.desc()).limit(50).all()
-        is_latest = True
-    elif get_by == 'oldest':
-        posts = Post.query.order_by(Post.created_at.asc()).limit(50).all()
-        is_latest = False
-    else:
-        posts = Post.query.order_by(Post.created_at.desc()).limit(50).all()
-    return render_template('home.html',is_user=is_user,posts=posts,isLatest=is_latest)
-        
-@app.route('/sign-in',methods=["GET","POST"])
+    posts = (
+        Post.query.filter(
+            Post.status == PostStatus.published
+        )
+        .order_by(Post.created_at.desc())
+        .limit(50)
+        .all()
+    )
+    return render_template("home.html", posts=posts, is_user=current_user)
+
+@app.route("/test")
+def test():
+    return render_template("test.html")
+
+# -------------------------------------------------------------------
+
+@app.route("/sign-in", methods=["GET", "POST"])
 @unauthenticated_only
 def sign_in():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
 
-        user = User.query.filter(User.email==email).first()
-        auth = bcrypt.check_password_hash(user.password,password)
-        if auth:
-            login_user(user)
-            return redirect("/")
-        
-    return render_template('sign-in.html')
+        user = User.query.filter_by(email=email, is_deleted=False).first()
+        if not user:
+            abort(401)
 
-@app.route('/sign-up',methods=["GET","POST"])
+        if bcrypt.check_password_hash(user.password_hash, password):
+            login_user(user, remember=True)
+            return redirect(url_for("index"))
+
+    return render_template("sign-in.html")
+
+
+# -------------------------------------------------------------------
+
+@app.route("/sign-up", methods=["GET", "POST"])
+@unauthenticated_only
 def sign_up():
     if request.method == "POST":
         username = request.form["username"]
         email = request.form["email"]
         password = request.form["password"]
 
-        hash_pass = bcrypt.generate_password_hash(password)
+        hashed = bcrypt.generate_password_hash(password).decode()
 
-        user = User(username=username,email=email,password=hash_pass)
+        user = User(
+            username=username,
+            email=email,
+            password_hash=hashed,
+        )
+
         db.session.add(user)
         db.session.commit()
 
-        return redirect('/sign-in')
+        return redirect(url_for("sign_in"))
 
-    return render_template('sign-up.html')
+    return render_template("sign-up.html")
 
 
+# -------------------------------------------------------------------
 
-@app.route('/logout',methods=["GET","POST"])
+@app.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect("/")
+    return redirect(url_for("sign_in"))
 
-@app.route('/profile',methods=["GET","POST"])
+
+# -------------------------------------------------------------------
+
+@app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
     profile = Profile.query.filter_by(user_id=current_user.id).first()
-    print(f"profile: {profile}")
+
     if request.method == "POST":
-        firstname = request.form["firstname"]
-        lastname = request.form["lastname"]
-        phone = request.form["phone"]
-        gender = request.form["gender"]
-        bio = request.form["bio"]
-        website = request.form["website"]
-        pic = request.files["pic"]
-        pic_filename = secure_filename(pic.filename)
-        # set uuid
-        pic_name = str(uuid.uuid1()) + '_' + pic_filename
+        pic = request.files.get("pic")
+        pic_name = None
 
-        # save the image
+        if pic and pic.filename:
+            filename = secure_filename(pic.filename)
+            pic_name = f"{uuid.uuid4()}_{filename}"
+            pic.save(os.path.join(UPLOAD_FOLDER, pic_name))
 
-        if profile is None:
-            profile = Profile(user_id=current_user.id, firstname=firstname, lastname=lastname, phone=phone, gender=gender, bio=bio, website=website, pic=pic_name)
+        if not profile:
+            profile = Profile(
+                user_id=current_user.id,
+                first_name=request.form["first_name"],
+                last_name=request.form.get("last_name"),
+                gender=request.form.get("gender"),
+                bio=request.form.get("bio"),
+                website=request.form.get("website"),
+                pic=pic_name,
+            )
             db.session.add(profile)
         else:
-            profile.firstname = firstname
-            profile.lastname = lastname
-            profile.phone = phone
-            profile.gender = gender
-            profile.bio = bio
-            profile.website = website
-            profile.pic = pic_name
-        try:
-            db.session.commit()
-            pic.save(os.path.join(UPLOAD_FOLDER, pic_name))
-        except:
-            print("error \n\n\n")
-    is_user = current_user
-    posts = current_user.posts
-    return render_template('profile.html',is_user=is_user,posts=posts, profile=profile)
+            profile.first_name = request.form["first_name"]
+            profile.last_name = request.form.get("last_name")
+            profile.gender = request.form.get("gender")
+            profile.bio = request.form.get("bio")
+            profile.website = request.form.get("website")
+            if pic_name:
+                profile.pic = pic_name
 
-@app.route('/create',methods=["GET","POST"])
+        db.session.commit()
+        return redirect(url_for("profile"))
+
+
+
+    return render_template(
+        "profile.html",
+        profile=profile,
+        posts=current_user.posts,
+        is_user=current_user,
+    )
+
+
+# -------------------------------------------------------------------
+
+@app.route("/create", methods=["GET", "POST"])
 @login_required
 def create():
-    is_user = current_user.is_authenticated
     if request.method == "POST":
         title = request.form["title"]
-        description = request.form["description"]
-        content = request.form["content"]
 
-        post = Post(title=title,description=description,content=content,user_id=current_user.id)
+        post = Post(
+            title=title,
+            slug=generate_slug(title),
+            description=request.form.get("description"),
+            content=request.form.get("content"),
+            author_id=current_user.id,
+            status=PostStatus.published,
+            published_at=datetime.utcnow(),
+        )
+
         db.session.add(post)
         db.session.commit()
-    
-        return redirect('/')
-    return render_template('create.html',is_user=is_user)
 
-@app.route('/content/<int:id>')
-def content(id):
-    post = Post.query.get(id)
-    return render_template('content.html',post=post)
+        return redirect(url_for("index"))
 
-@app.route('/search', methods=['GET'])
+    return render_template("create.html")
+
+
+# -------------------------------------------------------------------
+
+@app.route("/post/<slug>")
+def content(slug):
+    post = Post.query.filter_by(
+        slug=slug, status=PostStatus.published
+    ).first_or_404()
+
+    return render_template("content.html", post=post, is_user=current_user)
+
+
+# -------------------------------------------------------------------
+
+@app.route("/search")
 def search():
-    is_user = current_user
-    search_term = request.args.get('title')
-    if search_term:
-        results = Post.query.filter(Post.title.ilike(f"%{search_term}%")).all()
-        return render_template('search.html', posts=results, is_user=is_user)
+    query = request.args.get("title")
+    posts = []
 
-    return render_template('search.html', is_user=is_user)
+    if query:
+        posts = Post.query.filter(
+            Post.title.ilike(f"%{query}%"),
+            Post.status == PostStatus.published,
+        ).all()
 
-@app.route('/update/<int:id>', methods=['GET', 'POST'])
-def update(id):
-    post = Post.query.get(id)
-    if request.method == "POST":
-        post.title = request.form["title"]
-        post.description = request.form["description"]
-        post.content = request.form["content"]
+    return render_template("search.html", posts=posts, is_user=current_user)
 
-        db.session.commit()    
-        return redirect('/dashboard')
-    return render_template('update.html',post=post)
 
-@app.route('/delete/<int:id>')
-def delete(id):
-    post = Post.query.get(id)
-    db.session.delete(post)
+# -------------------------------------------------------------------
+
+@app.route("/delete/<int:post_id>")
+@login_required
+def delete(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if post.author_id != current_user.id:
+        abort(403)
+
+    post.status = PostStatus.archived
     db.session.commit()
-    return redirect('/dashboard')
+
+    return redirect(url_for("profile"))
 
 
-if __name__ == '__main__':
+# -------------------------------------------------------------------
+
+if __name__ == "__main__":
     app.run(debug=True)

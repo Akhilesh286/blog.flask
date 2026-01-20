@@ -1,10 +1,6 @@
 
 @import url(style.css);
 
-body {
-    background-color: var(--bg);
-}
-
 .search-bar {
     display: flex;
     justify-content: center;
@@ -13,7 +9,7 @@ body {
 
 .search-bar > form > input {
     background-color: transparent;
-    border: 2px solid var(--border);
+    border: 2px solid var(--border-primary);
     border-radius: 5px;
     padding: 5px;
     width: 20rem;
@@ -22,23 +18,23 @@ body {
 }
 
 .search-bar > form > input:focus {
-    border-color: var(--txt-secondary);
+    border-color: var(--border-hover);
 }
 
 .search-bar > form > button {
     background-color: transparent;
-    border: var(--txt-secondary) 2px solid;
+    border: var(--border-primary) 2px solid;
     border-radius: 5px;
     padding: 5px;
     color: white;
 }
 
 .search-bar > form > button:hover {
-    background-color: var(--txt-secondary);
+    background-color: var(--border-hover);
 }
 
 .cnt {
-    border: var(--border) 2px solid;
+    border: var(--border-primary) 2px solid;
     padding: 1rem;
     border-radius: 10px;
     margin-top: 2rem;

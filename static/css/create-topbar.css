@@ -1,0 +1,38 @@
+@import url(style.css);
+
+
+/* topbar */
+.topbar {
+  width: 100%;
+  padding: var(--space-lg);
+}
+
+/* Form */
+.topbar form {
+  gap: var(--gap-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar input,
+.topbar textarea {
+  flex-grow: 0;
+  width: 50%;
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+  border: none;
+  outline: none;
+  font-size: var(--font-base);
+  background-color: var(--foreground);
+  color: var(--text-light);
+}
+
+.topbar textarea {resize: none;}
+
+
+/* Main content */
+.content {
+  flex: 1;
+  padding: 30px;
+}
+

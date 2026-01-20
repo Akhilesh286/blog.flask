@@ -1,17 +1,4 @@
 @import url(style.css);
-:root {
-    --bg:#272727;
-    --border:#38583e;
-    --txt-dark:#070e08;
-    --txt-light:#ffffff;
-    --txt-primary:#8d8d8d;
-    --txt-secondary:#5cba6c;
-    --btn-primary:#6eeb83;
-}
-
-
-
-
 .cnt {
     padding: 1rem;
     margin-top: 2rem;

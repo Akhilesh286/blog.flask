@@ -15,28 +15,32 @@
             <div class="sett">
                 <div class="prf-pic" style="display: flex;justify-content: center;">
                     
-                    {% if profile.pic %}
-                    <img src="{{ url_for('static', filename='upload/' ~ profile.pic) }}" alt="Profile Picture" style="object-fit: cover; aspect-ratio: 1/1; margin-top: 1rem; width: 50%; height: auto; border-radius: 50%;">
-                    {% else %}
-                    <img src="{{ url_for('static', filename='images/prf.jpeg') }}" alt="Profile Picture" style="margin-top: 1rem; width: 50%; height: auto; border-radius: 50%;">
-                    {% endif %}
-                        
+                    
+                    <img
+                        id="profilePreview"
+                        {% if profile.pic %}
+                        src="{{ url_for('media', filename='upload/' ~ profile.pic) }}"
+                        {% else %}
+                        src="{{ url_for('static', filename='images/prf.jpeg') }}"
+                        {% endif %}
+                        alt="Profile Picture"
+                        style="margin-top: 1rem;object-fit: cover; width: 150px; height: 150px; border-radius: 50%;"
+                    />    
                 </div>
                 <div class="prf-dts">
                 </div>
                 <div class="prf-dts">
                     <div class="prf-inp">
                     <form action="" method="post" enctype="multipart/form-data">
-                        <input class="lock" type="file" name="pic" id="pic" style="display: none;">
-                        <input class="lock" disabled type="text" value="{{profile.firstname}}" name="firstname" placeholder="first name">
-                        <input class="lock" disabled type="text" value="{{profile.lastname}}" name="lastname" placeholder="last name">
+                        <input class="lock" type="file" name="pic" id="pic" accept="image/*" style="display: none;">
+                        <input class="lock" disabled type="text" value="{{profile.first_name}}" name="first_name" placeholder="first name">
+                        <input class="lock" disabled type="text" value="{{profile.last_name}}" name="last_name" placeholder="last name">
                         <select class="lock" disabled  name="gender">
                             <option value="human">{{profile.gender}}</option>
                             <option value="male">male</option>
                             <option value="female">female</option>
                         </select>
-                        <input class="lock" disabled type="text" value="{{profile.phone}}" name="phone" placeholder="Phone">
-                        <textarea class="lock" disabled id="bio" value="{{profile.bio}}" name="bio"  rows="4" placeholder="Tell us about yourself..."></textarea>
+                        <textarea class="lock" disabled id="bio" name="bio"  rows="4" placeholder="Tell us about yourself...">{{profile.bio}}</textarea>
                         <input class="lock" disabled type="text" value="{{profile.website}}" name="website" placeholder="website">                        
                         <button type="submit" style="display: none;" id="submit">submit</button>
                     </form>

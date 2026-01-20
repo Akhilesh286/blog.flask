@@ -9,15 +9,15 @@
     padding-bottom: 0;
     border: none;
     color: white;
-    border-bottom: var(--border) 5px solid;
+    border-bottom: var(--border-primary) 5px solid;
     background-color: transparent;
 }
 .top button:hover {
-    background-color: var(--border);
+    background-color: var(--border-hover);
 }
 
 .top .active {
-    background-color: var(--border);
+    background-color: var(--border-hover);
 }
 
 .cnt {

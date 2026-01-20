@@ -4,34 +4,41 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create-topbar.css') }}">
 {% endblock %}
 
 {% block body %}
+<section class="main-body">
+    <div class="top-nav-bar">
+        <nav id="topbar-mini" class="top-nav-mini">
+            <ul>
+                <li></li>
+                <li>hellow</li>
+                <li>hellow</li>
+                <li>hellow</li>
+            </ul>
+        </nav>
+        <div id="topbar-max" class="topbar-hide  top-nav-max">
+            {% include 'create-topbar.html' %}
+        </div>
+        <button id="toggleTopbar" class="toggle-topbar">show</button>
+    </div>
+    <!-- Main Content -->
+    <main class="content">
+      <h1>Main Content Area</h1>
+      <p>Your app content goes here.</p>
+      
+    </main>
+</section>
 
 
-    <section>
-        <dvi class="container">
-            <div class="cnt">
-                <div class="cnt-txt" style="text-align: center;">
-                    <h1>Create New Blog</h1>
-                    <h4>Share Your Thoughts and Idea's and Inspare People...</h4>
-                </div>
-                <form action="/create" method="post">
-                    <div class="cnt-inp">
-                        <input style="width: 50%;" type="text" name="title" id="username" placeholder="Title">
-                        <textarea style="width: 75%;" type="email" name="description" placeholder="Description" rows="2"></textarea>
-                        <textarea style="width: 75%;" type="email" name="content" placeholder="Content " rows="6"></textarea>
-                        <button type="submit">Save</button>
-                    </div>
-                </form>
-            </div>
-        </dvi>
-    </section>
 
 
 
     {% block scripts %}
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/create.js') }}"></script>
+
     {% endblock %}
 
 {% endblock %}

@@ -12,7 +12,7 @@
 .sett {
     width: 30%;
     /* height: 100vh; */
-    border: var(--border) solid 2px;
+    border: var(--border-primary) solid 2px;
     border-radius: 10px;
     border-bottom: none;
 
@@ -23,18 +23,18 @@
     gap: 2rem;
 }
 .top div{
-    border-bottom: var(--border) 5px solid;
+    border-bottom: var(--border-primary) 5px solid;
     padding: 1rem;
     padding-bottom: 0;
 }
 .top div:hover {
-    background-color: var(--border);
+    background-color: var(--border-hover);
 }
 
 .post {
     width: 80%;
     height: 100vh;
-    border: var(--border) solid 2px;
+    border: var(--border-primary) solid 2px;
     border-radius: 10px;
     border-bottom: none;
     border-right: none;
@@ -75,13 +75,13 @@
     margin: .5rem;
     width: 80%;
     background-color: var(--bg);
-    border: var(--border) 3px solid;
+    border: var(--border-primary) 3px solid;
     color: var(--txt-light);
     border-radius: 5px;
 }
 .prf-inp input:focus {
-    border-color: var(--border); /* Change border color */
-    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+    border-color: var(--border-hover); /* Change border color */
+    box-shadow: 0 0 8px var(--border-hover); /* Add shadow effect */
     /* background-color: #f0f8ff; Optional: change background color */
     outline: none; /* Remove default outline */
 }
@@ -90,14 +90,14 @@
     margin: .5rem;
     width: 80%;
     background-color: var(--bg);
-    border: var(--border) 3px solid;
+    border: var(--border-primary) 3px solid;
     color: var(--txt-light);
     border-radius: 5px;
 
 }
 .prf-inp textarea:focus {
-    border-color: var(--border); /* Change border color */
-    box-shadow: 0 0 8px var(--border); /* Add shadow effect */
+    border-color: var(--border-hover); /* Change border color */
+    box-shadow: 0 0 8px var(--border-hover); /* Add shadow effect */
     /* background-color: #f0f8ff; Optional: change background color */
     outline: none; /* Remove default outline */
 }
@@ -106,7 +106,7 @@
     margin: .5rem;
     width: 80%;
     background-color: var(--bg);
-    border: var(--border) 3px solid;
+    border: var(--border-primary) 3px solid;
     border-radius: 5px;
     color: var(--txt-light);
     
@@ -117,7 +117,7 @@
 .prf-inp button {
     color: var(--txt-light);
     background-color: var(--bg);
-    border: var(--border) 3px solid;
+    border: var(--border-primary) 3px solid;
     width: 80%;
     margin: 10%;
     margin-top: 0;
@@ -128,11 +128,11 @@
 
 .prf-inp button:hover {
     background-color: var(--txt-secondary);
-    border: var(--border) 2px solid;
+    border: var(--border-hover) 2px solid;
     color: var(--txt-dark);
 }
 .prf-inp button:focus{
-    /* box-shadow: 0 0 8px var(--border); Add shadow effect */
+    /* box-shadow: 0 0 8px var(--border-primary); Add shadow effect */
     outline: none;
     color: var(--txt-dark);
     background-color: var(--txt-secondary);
@@ -141,5 +141,5 @@
 .prf-inp button:active{
     border: none;
     outline: none;
-    /* box-shadow: 0 0 8px var(--border); Add shadow effect */
+    /* box-shadow: 0 0 8px var(--border-primary); Add shadow effect */
 }
