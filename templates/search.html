@@ -11,32 +11,37 @@
 {% include 'nav.html' %}
 
 <div class="search-bar">
-    <form action="/search" method="get">
-        <input type="text" name="title" id="search" placeholder="search..." >
-        <button type="submit">
-            <img src="{{ url_for('static',filename='icons/search.svg')}}" alt=""> search
+    <div class="search-inp">
+        <input type="text" name="q" hx-get="/search-people" hx-trigger="keyup changed delay:500ms" hx-target="#results" id="search" placeholder="search..." >
+    </div>
+    <div class="search-by">
+        <button 
+            type="button" 
+            class="switch-btn active" 
+            data-target="/search-people"
+            id="btn-people">
+            People
         </button>
-    </form>
+
+        <button 
+            type="button" 
+            class="switch-btn" 
+            data-target="/search-posts"
+            id="btn-posts">
+            Post
+        </button>
+    </div>
 </div>
 
 <div class="content">
-    <div style="margin-left: 2rem; margin-right: 2rem;">
-        {% for post in posts %}
-            <div class="cnt">
-            <a href="/content/{{post.id}}" style="all: unset;">
-                <div class="cnt-tit">
-                    <h1>{{post.title}}</h1>
-                    <h5>{{post.description}}</h5>
-                </div>
-            </a>
-            </div>    
-        {% endfor %}
+    <div id="results" class="container">
     </div>
 </div>
 
 
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}
 
 {% endblock %}

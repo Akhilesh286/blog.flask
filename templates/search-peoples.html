@@ -1,0 +1,13 @@
+{% for people in peoples %}
+    <div class="author-data">
+        <img class="profile-pic"
+            {% if people.profile.pic %}
+            src="{{ url_for('media', filename='upload/' ~ people.profile.pic) }}" 
+            {% else %}
+            src="{{ url_for('static',filename='images/prf.jpeg')}}" 
+            {% endif %}
+            alt=""
+        >
+        <p>{{people.username}}</p >
+    </div>
+{% endfor %}

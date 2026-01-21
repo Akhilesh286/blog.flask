@@ -1,0 +1,10 @@
+{% for post in posts %}
+    <div class="cnt">
+    <a href="/post/{{post.slug}}" style="all: unset;">
+        <div class="cnt-tit">
+            <h1>{{post.title}}</h1>
+            <h5>{{post.description}}</h5>
+        </div>
+    </a>
+    </div>    
+{% endfor %}

@@ -17,7 +17,7 @@ import uuid
 import re
 from markdown import markdown
 
-from models import db, User, Post, Profile, PostStatus
+from models import db, User, Post, Profile, PostStatus, PostLike, Comment, Bookmark, Follow
 
 # -------------------------------------------------------------------
 # App setup
@@ -496,16 +496,51 @@ def unfollow_user(user_id):
 
 @app.route("/search")
 def search():
-    query = request.args.get("title")
-    posts = []
+    return render_template("search.html", is_user=current_user)
 
-    if query:
-        posts = Post.query.filter(
-            Post.title.ilike(f"%{query}%"),
-            Post.status == PostStatus.published,
-        ).all()
 
-    return render_template("search.html", posts=posts, is_user=current_user)
+# -------------------------------------------------------------------
+
+@app.route("/search-posts")
+def search_posts():
+    query = request.args.get("q", "").strip()
+
+    # No query → show search page
+    if not query:
+        return ""
+
+    # Query exists → fetch results
+    results = (
+        Post.query.filter(Post.title.ilike(f"%{query}%"))
+        .order_by(Post.created_at.desc())
+        .limit(10)
+        .all()
+    )
+
+    return render_template(
+        "search-posts.html",
+        posts=results
+    )
+
+
+# -------------------------------------------------------------------
+
+@app.route("/search-people")
+def search_people():
+    query = request.args.get("q", "").strip()
+
+    # No query → show search page
+    if not query:
+        return ""
+
+    # Query exists → fetch results
+    results = User.query.filter(User.username.ilike(f"%{query}%")).limit(10).all()
+
+
+    return render_template(
+        "search-peoples.html",
+        peoples=results
+    )
 
 
 # -------------------------------------------------------------------
