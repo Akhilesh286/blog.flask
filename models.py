@@ -14,7 +14,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
 )
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, backref
 
 # -------------------------------------------------------------------
 # DB instance (THIS is what app.py imports)
@@ -67,13 +67,29 @@ class User(db.Model, UserMixin, TimestampMixin, SoftDeleteMixin):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
+    # Relations
     profile = relationship(
         "Profile", back_populates="user", uselist=False, cascade="all, delete-orphan"
     )
-
     posts = relationship(
         "Post", back_populates="author", cascade="all, delete-orphan"
     )
+    likes = relationship("PostLike", back_populates="user", cascade="all, delete-orphan")
+    comments = relationship("Comment", back_populates="user", cascade="all, delete-orphan")
+    bookmarks = relationship("Bookmark", back_populates="user", cascade="all, delete-orphan")
+    following = relationship(
+        "Follow",
+        foreign_keys="[Follow.follower_id]",
+        back_populates="follower",
+        cascade="all, delete-orphan"
+    )
+    followers = relationship(
+        "Follow",
+        foreign_keys="[Follow.following_id]",
+        back_populates="following",
+        cascade="all, delete-orphan"
+    )
+
 
     __table_args__ = (
         Index("ix_users_username", "username"),
@@ -128,9 +144,131 @@ class Post(db.Model, TimestampMixin):
         ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
 
+    # Relations
     author = relationship("User", back_populates="posts")
+    likes = relationship("PostLike", back_populates="post", cascade="all, delete-orphan")
+    comments = relationship("Comment", back_populates="post", cascade="all, delete-orphan")
+    bookmarks = relationship("Bookmark", back_populates="post", cascade="all, delete-orphan")
 
     __table_args__ = (
         Index("ix_posts_author", "author_id"),
         Index("ix_posts_status", "status"),
+    )
+
+# -------------------------------------------------------------------
+# Post Likes
+# -------------------------------------------------------------------
+
+class PostLike(db.Model, TimestampMixin):
+    __tablename__ = "post_likes"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    post_id: Mapped[int] = mapped_column(
+        ForeignKey("posts.id", ondelete="CASCADE"), nullable=False
+    )
+
+    # Relations
+    user = relationship("User", back_populates="likes")
+    post = relationship("Post", back_populates="likes")
+
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "post_id"),  # Prevent duplicate likes
+        Index("ix_likes_user", "user_id"),
+        Index("ix_likes_post", "post_id"),
+    )
+
+
+# -------------------------------------------------------------------
+# Comment
+# -------------------------------------------------------------------
+class Comment(db.Model, TimestampMixin):
+    __tablename__ = "comments"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    post_id: Mapped[int] = mapped_column(
+        ForeignKey("posts.id", ondelete="CASCADE"), nullable=False
+    )
+    parent_id: Mapped[int | None] = mapped_column(
+        ForeignKey("comments.id", ondelete="CASCADE"), nullable=True
+    )
+
+    # Relations
+    user = relationship("User", back_populates="comments")
+    post = relationship("Post", back_populates="comments")
+
+    replies = relationship(
+        "Comment",
+        cascade="all, delete-orphan",
+        backref=backref("parent", remote_side=[id])
+    )
+
+    __table_args__ = (
+        Index("ix_comments_post", "post_id"),
+        Index("ix_comments_user", "user_id"),
+    )
+
+
+
+# -------------------------------------------------------------------
+# Bookmark
+# -------------------------------------------------------------------
+class Bookmark(db.Model, TimestampMixin):
+    __tablename__ = "bookmarks"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    post_id: Mapped[int] = mapped_column(
+        ForeignKey("posts.id", ondelete="CASCADE"), nullable=False
+    )
+
+    # Relations
+    user = relationship("User", back_populates="bookmarks")
+    post = relationship("Post", back_populates="bookmarks")
+
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "post_id"),  
+        Index("ix_bookmarks_user", "user_id"),
+        Index("ix_bookmarks_post", "post_id"),
+    )
+
+
+# -------------------------------------------------------------------
+# Followers
+# -------------------------------------------------------------------
+class Follow(db.Model, TimestampMixin):
+    __tablename__ = "follows"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    follower_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    following_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    # Relations
+    follower = relationship("User", foreign_keys=[follower_id], back_populates="following")
+    following = relationship("User", foreign_keys=[following_id], back_populates="followers")
+
+    __table_args__ = (
+        db.UniqueConstraint("follower_id", "following_id"),
+        CheckConstraint("follower_id != following_id"),  # prevent self-follow
+        Index("ix_follow_follower", "follower_id"),
+        Index("ix_follow_following", "following_id"),
     )

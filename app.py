@@ -305,6 +305,195 @@ def content(slug):
 
 # -------------------------------------------------------------------
 
+@app.post("/posts/<int:post_id>/like")
+@login_required
+def like_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    # Prevent duplicate likes
+    existing = PostLike.query.filter_by(
+        user_id=current_user.id, post_id=post_id
+    ).first()
+
+    if existing:
+        return redirect(url_for("content", post_id=post_id))
+
+    like = PostLike(user_id=current_user.id, post_id=post_id)
+    db.session.add(like)
+    db.session.commit()
+
+    return redirect(url_for("content", post_id=post_id))
+
+
+# -------------------------------------------------------------------
+
+@app.post("/posts/<int:post_id>/unlike")
+@login_required
+def unlike_post(post_id):
+    like = PostLike.query.filter_by(
+        user_id=current_user.id,
+        post_id=post_id
+    ).first_or_404()
+
+    db.session.delete(like)
+    db.session.commit()
+
+    return redirect(url_for("content", post_id=post_id))
+
+
+# -------------------------------------------------------------------
+
+@app.post("/posts/<int:post_id>/comment")
+@login_required
+def add_comment(post_id):
+    post = Post.query.get_or_404(post_id)
+    content = request.form.get("content")
+
+    if not content.strip():
+        abort(400, "Comment cannot be empty")
+
+    comment = Comment(
+        content=content,
+        user_id=current_user.id,
+        post_id=post.id
+    )
+
+    db.session.add(comment)
+    db.session.commit()
+
+    return redirect(url_for("view_post", post_id=post.id))
+
+
+# -------------------------------------------------------------------
+
+@app.post("/comments/<int:comment_id>/reply")
+@login_required
+def reply_comment(comment_id):
+    parent = Comment.query.get_or_404(comment_id)
+    content = request.form.get("content")
+
+    if not content.strip():
+        abort(400, "Reply cannot be empty")
+
+    reply = Comment(
+        content=content,
+        user_id=current_user.id,
+        post_id=parent.post_id,
+        parent_id=parent.id
+    )
+
+    db.session.add(reply)
+    db.session.commit()
+
+    return redirect(url_for("view_post", post_id=parent.post_id))
+
+
+# -------------------------------------------------------------------
+
+@app.post("/comments/<int:comment_id>/delete")
+@login_required
+def delete_comment(comment_id):
+    comment = Comment.query.get_or_404(comment_id)
+
+    if comment.user_id != current_user.id:
+        abort(403)
+
+    post_id = comment.post_id
+
+    db.session.delete(comment)
+    db.session.commit()
+
+    return redirect(url_for("view_post", post_id=post_id))
+
+
+# -------------------------------------------------------------------
+
+@app.post("/posts/<int:post_id>/bookmark")
+@login_required
+def bookmark_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    existing = Bookmark.query.filter_by(
+        user_id=current_user.id,
+        post_id=post_id
+    ).first()
+
+    if existing:
+        return redirect(url_for("view_post", post_id=post_id))
+
+    bookmark = Bookmark(
+        user_id=current_user.id,
+        post_id=post_id
+    )
+
+    db.session.add(bookmark)
+    db.session.commit()
+
+    return redirect(url_for("view_post", post_id=post_id))
+
+
+# -------------------------------------------------------------------
+
+@app.post("/posts/<int:post_id>/unbookmark")
+@login_required
+def unbookmark_post(post_id):
+    bookmark = Bookmark.query.filter_by(
+        user_id=current_user.id,
+        post_id=post_id
+    ).first_or_404()
+
+    db.session.delete(bookmark)
+    db.session.commit()
+
+    return redirect(url_for("view_post", post_id=post_id))
+
+
+# -------------------------------------------------------------------
+
+@app.post("/users/<int:user_id>/follow")
+@login_required
+def follow_user(user_id):
+    user = User.query.get_or_404(user_id)
+
+    if user.id == current_user.id:
+        abort(400, "You cannot follow yourself")
+
+    existing = Follow.query.filter_by(
+        follower_id=current_user.id,
+        following_id=user_id
+    ).first()
+
+    if existing:
+        return redirect(url_for("profile", user_id=user_id))
+
+    follow = Follow(
+        follower_id=current_user.id,
+        following_id=user_id
+    )
+    db.session.add(follow)
+    db.session.commit()
+
+    return redirect(url_for("profile", user_id=user_id))
+
+
+# -------------------------------------------------------------------
+
+@app.post("/users/<int:user_id>/unfollow")
+@login_required
+def unfollow_user(user_id):
+    follow = Follow.query.filter_by(
+        follower_id=current_user.id,
+        following_id=user_id
+    ).first_or_404()
+
+    db.session.delete(follow)
+    db.session.commit()
+
+    return redirect(url_for("profile", user_id=user_id))
+
+
+# -------------------------------------------------------------------
+
 @app.route("/search")
 def search():
     query = request.args.get("title")
