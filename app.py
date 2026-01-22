@@ -1,4 +1,13 @@
-from flask import Flask, render_template, redirect, request, url_for, abort, send_from_directory, send_file
+from flask import (
+    Flask,
+    render_template, 
+    redirect, 
+    request,
+    url_for, 
+    abort, 
+    send_from_directory, 
+    send_file
+)
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_login import (
@@ -161,6 +170,20 @@ def test():
 
 # -------------------------------------------------------------------
 
+@app.route("/@<username>")
+def profile(username):
+    if not re.match(r'^[A-Za-z0-9_]+$', username):
+        return abort(404)
+
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return abort(404)
+
+    return render_template("profile.html", profile=user.profile,user=user, is_user=current_user)
+
+
+# -------------------------------------------------------------------
+
 @app.route("/sign-in", methods=["GET", "POST"])
 @unauthenticated_only
 def sign_in():
@@ -218,7 +241,7 @@ def logout():
 
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
-def profile():
+def user_profile():
     profile = Profile.query.filter_by(user_id=current_user.id).first()
 
     if request.method == "POST":
@@ -259,6 +282,7 @@ def profile():
         "profile.html",
         profile=profile,
         posts=current_user.posts,
+        user=current_user,
         is_user=current_user,
     )
 

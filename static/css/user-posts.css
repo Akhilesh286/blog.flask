@@ -1,0 +1,31 @@
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+}
+.user-posts {
+    border: 2px solid var(--border-primary);
+    border-left: none;
+    flex-grow: 1;
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    overflow-y: scroll;
+}
+
+.post {
+    border-left: 2px solid var(--border-primary);
+    /* border-radius: var(--radius-xl); */
+    padding: var(--space-md);
+    cursor: pointer;
+}
+
+.post h1 {
+    color: var(--text-title);
+}
+
+.post p {
+    color: var(--text-subtitle);
+}

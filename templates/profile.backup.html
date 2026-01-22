@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block body %}
+    
+    {% include 'nav.html' %}
+
+    <section>
+        <div class="" style="display: flex;gap: 5rem;">
+            <div class="sett">
+                <div class="prf-pic" style="display: flex;justify-content: center;">
+                    
+                    
+                    <img
+                        id="profilePreview"
+                        {% if profile.pic %}
+                        src="{{ url_for('media', filename='upload/' ~ profile.pic) }}"
+                        {% else %}
+                        src="{{ url_for('static', filename='images/prf.jpeg') }}"
+                        {% endif %}
+                        alt="Profile Picture"
+                        style="margin-top: 1rem;object-fit: cover; width: 150px; height: 150px; border-radius: 50%;"
+                    />    
+                </div>
+                <div class="prf-dts">
+                </div>
+                <div class="prf-dts">
+                    <div class="prf-inp">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <input class="lock" type="file" name="pic" id="pic" accept="image/*" style="display: none;">
+                        <input class="lock" disabled type="text" value="{{profile.first_name}}" name="first_name" placeholder="first name">
+                        <input class="lock" disabled type="text" value="{{profile.last_name}}" name="last_name" placeholder="last name">
+                        <select class="lock" disabled  name="gender">
+                            <option value="human">{{profile.gender}}</option>
+                            <option value="male">male</option>
+                            <option value="female">female</option>
+                        </select>
+                        <textarea class="lock" disabled id="bio" name="bio"  rows="4" placeholder="Tell us about yourself...">{{profile.bio}}</textarea>
+                        <input class="lock" disabled type="text" value="{{profile.website}}" name="website" placeholder="website">                        
+                        <button type="submit" style="display: none;" id="submit">submit</button>
+                    </form>
+                        <button id="edit">Edit</button>
+                        <a href="/logout">
+                            <button style="background-color: transparent;border: black 3px solid;color: red;">Logout</button>
+                        </a>
+                    
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <div style="margin-left: 2rem; margin-right: 2rem;">
+                    {% for post in posts %}
+                    <div class="cnt">
+                        <div class="cnt-tit">
+                            <h3>{{post.title}}</h3>
+                            <h6>{{post.description}}</h6>
+                        </div>
+                    <div style="display: flex;justify-content: space-between;">
+                        <div>
+                            <a href="/update/{{post.id}}" style="font-size: 12px;padding: 5px; border: 2px solid black;background-color: transparent;color: aqua;">update</a>
+                            <a href="/delete/{{post.id}}" style="font-size: 12px;padding: 5px; border: 2px solid black;background-color: transparent;color: red;">delete</a>
+                        </div>
+                        <div class="cnt-dts">
+                            <p>{{post.created_at.strftime("%Y-%m-%d")}}</p>
+                            <!-- <p>{{post.created_at.strftime("%Y-%m-%d")}}</p> -->
+                        </div>
+                    </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% block scripts %}
+        <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+    {% endblock %}
+
+{% endblock %}

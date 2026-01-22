@@ -1,0 +1,8 @@
+<div class="user-posts">
+    {% for post in user.posts %}
+        <a class="post" href="/post/{{post.slug}}">
+            <h1>{{post.title}}</h1>
+            <p>{{post.description}}</p>
+        </a>
+    {% endfor %}
+</div>

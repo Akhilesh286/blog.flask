@@ -84,6 +84,7 @@
     --gap-md: calc(var(--gap-base) * 1);      /* 12px */
     --gap-lg: calc(var(--gap-base) * 1.5);    /* 18px */
     --gap-xl: calc(var(--gap-base) * 2);      /* 24px */
+    --gap-2xl: calc(var(--gap-base) * 4);      /* 24px */
 
 
     /* ========== BORDER SIZE ========== */

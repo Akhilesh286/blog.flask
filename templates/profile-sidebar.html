@@ -1,0 +1,35 @@
+<div class="sidebar">
+    {% include 'profile-topbar.html' %}
+    <div class="profile-pic">      
+        <img
+            id="profilePreview"
+            {% if profile.pic %}
+            src="{{ url_for('media', filename='upload/' ~ profile.pic) }}"
+            {% else %}
+            src="{{ url_for('static', filename='images/prf.jpeg') }}"
+            {% endif %}
+            alt="Profile Picture"
+            class="profile-img"
+        />
+    </div>
+    <p class="user-username">{{user.username}}</p>
+    <div class="profile-details">
+        <p class="user-name">{{profile.first_name}} {{profile.last_name}}</p>
+        <a class="user-web" href="{{ profile.website if profile.website.startswith('http') else 'https://' + profile.website }}">
+            {{ profile.website }}
+        </a>
+        <p class="user-bio">{{profile.bio}}</p>
+    </div>
+    <div class="follow-stats">
+        <div class="followers">
+            <h1>{{ user.followers | length }}</h1>
+            <p>Followers</p>
+        </div>
+
+        <div class="following">
+            <h1>{{ user.following | length }}</h1>
+            <p>Following</p>
+        </div>
+    </div>
+
+</div>
