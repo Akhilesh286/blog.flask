@@ -307,39 +307,25 @@ def content(slug):
 
 @app.post("/posts/<int:post_id>/like")
 @login_required
-def like_post(post_id):
+def toggle_like(post_id):
     post = Post.query.get_or_404(post_id)
 
-    # Prevent duplicate likes
     existing = PostLike.query.filter_by(
         user_id=current_user.id, post_id=post_id
     ).first()
 
     if existing:
-        return redirect(url_for("content", post_id=post_id))
+        # UNLIKE
+        db.session.delete(existing)
+        db.session.commit()
+    else:
+        # LIKE
+        like = PostLike(user_id=current_user.id, post_id=post_id)
+        db.session.add(like)
+        db.session.commit()
 
-    like = PostLike(user_id=current_user.id, post_id=post_id)
-    db.session.add(like)
-    db.session.commit()
-
-    return redirect(url_for("content", post_id=post_id))
-
-
-# -------------------------------------------------------------------
-
-@app.post("/posts/<int:post_id>/unlike")
-@login_required
-def unlike_post(post_id):
-    like = PostLike.query.filter_by(
-        user_id=current_user.id,
-        post_id=post_id
-    ).first_or_404()
-
-    db.session.delete(like)
-    db.session.commit()
-
-    return redirect(url_for("content", post_id=post_id))
-
+    # Return updated like section (HTMX partial)
+    return render_template("like-section.html", post=post)
 
 # -------------------------------------------------------------------
 
@@ -410,7 +396,7 @@ def delete_comment(comment_id):
 
 @app.post("/posts/<int:post_id>/bookmark")
 @login_required
-def bookmark_post(post_id):
+def toggle_bookmark(post_id):
     post = Post.query.get_or_404(post_id)
 
     existing = Bookmark.query.filter_by(
@@ -419,33 +405,21 @@ def bookmark_post(post_id):
     ).first()
 
     if existing:
-        return redirect(url_for("view_post", post_id=post_id))
+        # UNBOOKMARK
+        db.session.delete(existing)
+        db.session.commit()
+    else:
+        # BOOKMARK
+        bookmark = Bookmark(
+            user_id=current_user.id,
+            post_id=post_id
+        )
+        db.session.add(bookmark)
+        db.session.commit()
 
-    bookmark = Bookmark(
-        user_id=current_user.id,
-        post_id=post_id
-    )
+    db.session.refresh(post)
 
-    db.session.add(bookmark)
-    db.session.commit()
-
-    return redirect(url_for("view_post", post_id=post_id))
-
-
-# -------------------------------------------------------------------
-
-@app.post("/posts/<int:post_id>/unbookmark")
-@login_required
-def unbookmark_post(post_id):
-    bookmark = Bookmark.query.filter_by(
-        user_id=current_user.id,
-        post_id=post_id
-    ).first_or_404()
-
-    db.session.delete(bookmark)
-    db.session.commit()
-
-    return redirect(url_for("view_post", post_id=post_id))
+    return render_template("bookmark-section.html", post=post)
 
 
 # -------------------------------------------------------------------

@@ -4,6 +4,9 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/like-section.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bookmark-section.css') }}">
+
 {% endblock %}
 
 {% block body %}
@@ -24,11 +27,11 @@
                         <div class="comment-btn action-btns">
                             <button id="toggle-comment">comment</button>
                         </div>
-                        <div class="save action-btns">
-                            <button>save</button>
+                        <div id="bookmark-section">
+                            {% include "bookmark-section.html" %}
                         </div>
-                        <div class="like action-btns">
-                            <button>like</button>
+                        <div id="like-section">
+                            {% include "like-section.html" %}
                         </div>
                     </div>
                     <div class="author-data">

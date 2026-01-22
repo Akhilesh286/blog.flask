@@ -1,0 +1,26 @@
+<div class="post-actions">
+
+    {% set is_bookmarked = post.bookmarks.filter_by(user_id=current_user.id).first() %}
+
+    {% if is_bookmarked %}
+        <button
+            hx-post="/posts/{{ post.id }}/bookmark"
+            hx-trigger="click"
+            hx-target="#bookmark-section"
+            hx-swap="innerHTML"
+            class="bookmarked-btn"
+        >
+            ★ Bookmarked (Undo)
+        </button>
+    {% else %}
+        <button
+            hx-post="/posts/{{ post.id }}/bookmark"
+            hx-trigger="click"
+            hx-target="#bookmark-section"
+            hx-swap="innerHTML"
+            class="bookmark-btn"
+        >
+            ☆ Bookmark
+        </button>
+    {% endif %}
+</div>

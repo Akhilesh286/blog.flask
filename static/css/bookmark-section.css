@@ -1,0 +1,13 @@
+.bookmark-btn {
+    background: #eee;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.bookmarked-btn {
+    background: gold;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+}
