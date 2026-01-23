@@ -1,35 +1,47 @@
 {% extends "base.html" %}
 
-{% block title %}update{% endblock %}
+{% block title %}Home Page{% endblock %}
 
 {% block head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/material-darker.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/xml/xml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create-topbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/md-editor.css') }}">
 {% endblock %}
 
 {% block body %}
-
-    <section>
-        <dvi class="container">
-            <div class="cnt">
-                <div class="cnt-txt" style="text-align: center;">
-                    <h1>Update</h1>
-                </div>
-                <form action="" method="post">
-                    <div class="cnt-inp">
-                        <input value="{{post.title}}" style="width: 50%;" type="text" name="title" id="username" placeholder="Title">
-                        <textarea style="width: 75%;" name="description" placeholder="Description" rows="2">{{post.description}}</textarea>
-                        <textarea style="width: 75%;" name="content" placeholder="Content " rows="6">{{post.content}}</textarea>
-                        <button type="submit">Update</button>
-                    </div>
-                </form>
+<section class="main-body">
+    <form action="/create" method="post">
+        <div class="top-nav-bar">
+            <nav id="topbar-mini" class="top-nav-mini">
+                {% include 'create-menu.html' %}
+            </nav>
+            <div id="topbar-max" class="topbar-hide top-nav-max">
+                {% include 'create-topbar.html' %}
             </div>
-        </dvi>
-    </section>
+            <button type="button" id="toggleTopbar" class="topbar-btn" >show</button>
+            <button type="button" id="backBtn" class="topbar-btn" >Back</button>
+        </div>
+        <!-- Main Content -->
+        <main>
+            {% include 'md-editor.html' %}
+        </main>
+    </form>
+</section>
+
+
 
 
 
     {% block scripts %}
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/create.js') }}"></script>
+
     {% endblock %}
 
 {% endblock %}

@@ -6,7 +6,8 @@ from flask import (
     url_for, 
     abort, 
     send_from_directory, 
-    send_file
+    send_file,
+    make_response
 )
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
@@ -246,6 +247,7 @@ def logout():
 @login_required
 def user_profile():
     profile = Profile.query.filter_by(user_id=current_user.id).first()
+    posts = current_user.posts.filter(Post.status == PostStatus.published).all()
 
     if request.method == "POST":
         pic = request.files.get("pic")
@@ -282,7 +284,7 @@ def user_profile():
     return render_template(
         "profile.html",
         profile=profile,
-        posts=current_user.posts,
+        posts=posts,
         user=current_user,
         is_current_user=True
     )
@@ -298,7 +300,7 @@ def dashboard():
 
 @app.route("/create", methods=["GET", "POST"])
 @login_required
-def create():
+def create_post():
     if request.method == "POST":
         title = request.form["title"]
 
@@ -317,7 +319,7 @@ def create():
 
         return redirect(url_for("index"))
 
-    return render_template("create.html")
+    return render_template("editor.html")
 
 
 # -------------------------------------------------------------------
@@ -550,9 +552,36 @@ def search_people():
 
 # -------------------------------------------------------------------
 
-@app.route("/delete/<int:post_id>")
+@app.route("/posts/<int:post_id>/update", methods=["GET", "POST"])
 @login_required
-def delete(post_id):
+def update_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if request.method == "POST":
+        title = request.form["title"]
+        slug = generate_slug(title)
+        status = post_status_converter(request.form.get("status"))
+        
+        post.title=title
+        post.slug=slug
+        post.description=request.form.get("description")
+        post.content=request.form.get("content")
+        post.status=status
+
+        db.session.add(post)
+        db.session.commit()
+        if status == PostStatus.draft:
+            return redirect(url_for('index'))
+        return redirect(url_for("content",slug=slug))
+
+    # GET -> show update page
+    return render_template("editor.html", post=post)
+
+# -------------------------------------------------------------------
+
+@app.route("/posts/<int:post_id>/archive")
+@login_required
+def archive_post(post_id):
     post = Post.query.get_or_404(post_id)
 
     if post.author_id != current_user.id:
@@ -561,9 +590,33 @@ def delete(post_id):
     post.status = PostStatus.archived
     db.session.commit()
 
-    return redirect(url_for("profile"))
+    return redirect(url_for("user_profile"))
 
 
+# -------------------------------------------------------------------
+
+@app.get("/posts/confirm-delete/<int:post_id>")
+def confirm_delete(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template("modals/delete-post.html", post=post)
+
+# -------------------------------------------------------------------
+
+@app.delete("/posts/<int:post_id>")
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if post.author_id != current_user.id:
+        abort(403)
+
+    db.session.delete(post)
+    db.session.commit()
+
+    # HTMX loves 204 (no content)
+    response = make_response("", 204)
+    response.headers["HX-Refresh"] = "true"
+    return response
 # -------------------------------------------------------------------
 
 @app.get("/dashboard/drafts")

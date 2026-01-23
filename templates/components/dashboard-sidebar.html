@@ -1,15 +1,21 @@
 <div class="dashboard-sidebar">
+    <button id="backBtn">Back</button>
+    <div class="dashboard-child" hx-get="/dashboard/bookmarks" hx-target="#main-content" hx-swap="innerHTML">
+        Bookmark Posts
+    </div>
+
     <div class="dashboard-child" hx-get="/dashboard/drafts" hx-target="#main-content" hx-swap="innerHTML">
         Draft Posts
+    </div>
+
+    <div class="dashboard-child" hx-get="/dashboard/archive" hx-target="#main-content" hx-swap="innerHTML">
+        Archive Posts
     </div>
 
     <div class="dashboard-child" hx-get="/dashboard/likes" hx-target="#main-content" hx-swap="innerHTML">
         Likes
     </div>
 
-    <div class="dashboard-child" hx-get="/dashboard/archive" hx-target="#main-content" hx-swap="innerHTML">
-        Archive Posts
-    </div>
 
     <div class="dashboard-child" hx-get="/dashboard/comments" hx-target="#main-content" hx-swap="innerHTML">
         Comments
@@ -40,10 +46,6 @@
         2 factor authentication
     </div>
 
-    <div class="dashboard-child" hx-get="/dashboard/logout" hx-target="#main-content" hx-swap="innerHTML">
-        Logout
-    </div>
-
     <div class="dashboard-child" hx-get="/dashboard/about" hx-target="#main-content" hx-swap="innerHTML">
         About
     </div>
@@ -52,8 +54,9 @@
         Help
     </div>
 
-    <div class="dashboard-child" hx-get="/dashboard/bookmarks" hx-target="#main-content" hx-swap="innerHTML">
-        Bookmark Posts
+    <div class="dashboard-child" hx-get="/dashboard/logout" hx-target="#main-content" hx-swap="innerHTML">
+        Logout
     </div>
+
 
 </div>

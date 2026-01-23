@@ -15,14 +15,16 @@
 {% endblock %}
 
 {% block body %}
+{% set post = post if post is defined else None %}
+
 <section class="main-body">
-    <form action="/create" method="post">
+    <form action="{{ url_for('update_post', post_id=post.id) if post else url_for('create_post') }}" method="POST">
         <div class="top-nav-bar">
             <nav id="topbar-mini" class="top-nav-mini">
-                {% include 'create-menu.html' %}
+                {% include 'editor-menu.html' %}
             </nav>
             <div id="topbar-max" class="topbar-hide top-nav-max">
-                {% include 'create-topbar.html' %}
+                {% include 'editor-topbar.html' %}
             </div>
             <button type="button" id="toggleTopbar" class="topbar-btn" >show</button>
             <button type="button" id="backBtn" class="topbar-btn" >Back</button>

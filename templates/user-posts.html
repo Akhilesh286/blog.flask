@@ -1,8 +1,33 @@
 <div class="user-posts">
-    {% for post in user.posts %}
+    {% for post in posts %}
+    <div class="post-card" id="post-{{post.id}}">
         <a class="post" href="/post/{{post.slug}}">
             <h1>{{post.title}}</h1>
             <p>{{post.description}}</p>
         </a>
+        <div class="dropdown">
+            <button class="dot-button" data-bs-toggle="dropdown">
+                <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item update" href="/posts/{{post.id}}/update">Update</a></li>
+                <li>
+                    <a 
+                        class="dropdown-item delete"
+                        hx-get="/posts/confirm-delete/{{ post.id }}"
+                        hx-target="#deleteModalContent"
+                        hx-trigger="click"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal"
+                        href="#"
+                    >
+                        Delete
+                    </a>
+                </li>
+
+                <li><a class="dropdown-item archive" href="/posts/{{post.id}}/archive">Archive</a></li>
+            </ul>
+        </div>
+    </div>
     {% endfor %}
 </div>

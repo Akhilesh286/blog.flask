@@ -19,6 +19,14 @@
             {% include 'user-posts.html' %}
         </div>
     </section>
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" id="deleteModalContent">
+            <!-- HTMX will load content here -->
+            </div>
+        </div>
+    </div>
+
 
     {% block scripts %}
         <script src="{{ url_for('static', filename='js/profile.js') }}"></script>

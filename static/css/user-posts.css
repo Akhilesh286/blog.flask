@@ -15,8 +15,33 @@ a:hover {
     overflow-y: scroll;
 }
 
-.post {
+.post-card {
     border-left: 2px solid var(--border-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.dot-button {
+    background-color: transparent;
+    border: none;
+    color: var(--text-title);
+}
+.dropdown-menu {
+    background-color: var(--background-extra);
+}
+.dropdown-item {
+    color: var(--text-subtitle);
+}
+.dropdown-item.update:hover {
+    background-color: var(--color-info);
+}
+.dropdown-item.delete:hover {
+    background-color: var(--color-error);
+}
+.dropdown-item.archive:hover {
+    background-color: var(--color-warning);
+}
+.post {
     /* border-radius: var(--radius-xl); */
     padding: var(--space-md);
     cursor: pointer;

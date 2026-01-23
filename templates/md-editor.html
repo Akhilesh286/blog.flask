@@ -1,7 +1,7 @@
 
 <div class="wrapper" id="wrapper">
     <div class="editor-panel">
-        <textarea name="content" id="editor"></textarea>
+        <textarea name="content" id="editor">{{ post.content | default('') }}</textarea>
     </div>
 
     <div class="splitter" id="splitter"></div>

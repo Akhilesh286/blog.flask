@@ -72,7 +72,7 @@ class User(db.Model, UserMixin, TimestampMixin, SoftDeleteMixin):
         "Profile", back_populates="user", uselist=False, cascade="all, delete-orphan"
     )
     posts = relationship(
-        "Post", back_populates="author", cascade="all, delete-orphan"
+        "Post", back_populates="author", cascade="all, delete-orphan",lazy="dynamic"
     )
     likes = relationship("PostLike", back_populates="user", cascade="all, delete-orphan")
     comments = relationship("Comment", back_populates="user", cascade="all, delete-orphan")

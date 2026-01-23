@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <h5 class="modal-title">Delete Post</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+</div>
+
+<div class="modal-body">
+    <p>Are you sure you want to delete this post?</p>
+
+    <div class="alert alert-secondary">
+        <strong>{{ post.title }}</strong>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button 
+        class="btn btn-danger"
+        hx-delete="/posts/{{ post.id }}"
+        hx-target="#post-{{ post.id }}"
+        hx-swap="outerHTML"
+        data-bs-dismiss="modal"
+    >
+        Delete
+    </button>
+
+    <button 
+        class="btn btn-warning"
+        hx-post="/posts/{{ post.id }}/archive"
+        hx-target="#post-{{ post.id }}"
+        hx-swap="outerHTML"
+        data-bs-dismiss="modal"
+    >
+        Archive
+    </button>
+</div>
