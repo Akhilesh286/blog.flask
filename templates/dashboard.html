@@ -1,0 +1,30 @@
+
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard-sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="dashboard-container">
+        {% include 'components/dashboard-sidebar.html' %}
+
+        <div id="main-content" class="main-content">
+            <!-- HTMX will load pages here -->
+            {% include 'dashboard/default.html' %}
+        </div>
+    </div>
+
+
+    {% block scripts %}
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    {% endblock %}
+
+{% endblock %}
+

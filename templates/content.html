@@ -36,8 +36,8 @@
                     </div>
                     <div class="author-data">
                         <img class="profile-pic"
-                            {% if is_user.profile.pic %}
-                            src="{{ url_for('media', filename='upload/' ~ post.author.profile.pic) }}" 
+                            {% if post.author.profile.pic %}
+                            src="{{ url_for('media', filename='uploads/' ~ post.author.profile.pic) }}" 
                             {% else %}
                             src="{{ url_for('static',filename='images/prf.jpeg')}}" 
                             {% endif %}

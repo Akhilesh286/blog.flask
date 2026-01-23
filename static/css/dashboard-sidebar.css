@@ -1,0 +1,28 @@
+
+.dashboard-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    border: 2px solid var(--border-primary) ;
+    width: 15rem;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.dashboard-child {
+    padding: var(--space-md) var(--space-sm);
+    color: var(--text-subtitle);
+    background-color: var(--background-extra);
+    user-select: none;
+}
+
+.dashboard-child:hover {
+    cursor: pointer;
+    background-color: var(--foreground);
+    color: var(--text-title);
+}
+
+.dashboard-child.active {
+    background-color: #3a3a3a; 
+    border-left: 3px solid #4CAF50;
+}

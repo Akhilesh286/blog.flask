@@ -40,7 +40,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-UPLOAD_FOLDER = os.path.join(app.root_path, "media", "upload")
+UPLOAD_FOLDER = os.path.join(app.root_path, "media", "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 db.init_app(app)
@@ -97,10 +97,6 @@ def media(filename):
 def profile_pic():
     DEFAULT_IMAGE = os.path.join("static", "images", "prf.jpeg")
 
-    # not logged in
-    if not current_user.is_authenticated:
-        return send_file(DEFAULT_IMAGE)
-
     profile = getattr(current_user, "profile", None)
 
     # no profile or no picture
@@ -114,6 +110,13 @@ def profile_pic():
         return send_file(DEFAULT_IMAGE)
 
     return send_file(image_path)
+
+
+@app.route("/components/profile-pic")
+@login_required
+def profile_pic_component():
+    return render_template("components/profile-pic.html")
+
 
 def post_status_converter(status):
     if status == "draft":
@@ -162,7 +165,7 @@ def index():
         .paginate(page=page, per_page=per_page, error_out=False)
     )
 
-    return render_template("home.html", posts=posts.items, is_user=current_user)
+    return render_template("home.html", posts=posts.items)
 
 @app.route("/test")
 def test():
@@ -179,7 +182,7 @@ def profile(username):
     if not user:
         return abort(404)
 
-    return render_template("profile.html", profile=user.profile,user=user, is_user=current_user)
+    return render_template("profile.html", profile=user.profile,user=user, is_current_user=False)
 
 
 # -------------------------------------------------------------------
@@ -276,16 +279,20 @@ def user_profile():
         db.session.commit()
         return redirect(url_for("profile"))
 
-
-
     return render_template(
         "profile.html",
         profile=profile,
         posts=current_user.posts,
         user=current_user,
-        is_user=current_user,
+        is_current_user=True
     )
 
+# -------------------------------------------------------------------
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
 
 # -------------------------------------------------------------------
 
@@ -324,7 +331,7 @@ def content(slug):
         post.content,
         extensions=["fenced_code", "tables", "toc", "nl2br"]
     ) if post.content else None
-    return render_template("content.html", post=post, is_user=current_user, content=html_content)
+    return render_template("content.html", post=post, content=html_content)
 
 
 # -------------------------------------------------------------------
@@ -558,6 +565,114 @@ def delete(post_id):
 
 
 # -------------------------------------------------------------------
+
+@app.get("/dashboard/drafts")
+def dashboard_drafts():
+    return render_template("dashboard/drafts.html")
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/likes")
+def dashboard_likes():
+    return render_template("dashboard/likes.html")
+
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/archive")
+def dashboard_archive():
+    return render_template("dashboard/archive.html")
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/comments")
+def dashboard_comments():
+    return render_template("dashboard/comments.html")
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/following")
+def dashboard_following():
+    return render_template("dashboard/following.html")
+
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/followers")
+def dashboard_followers():
+    return render_template("dashboard/followers.html")
+
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/security")
+def dashboard_security():
+    return render_template("dashboard/security.html")
+
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/phone")
+def dashboard_phone():
+    return render_template("dashboard/phone_verification.html")
+
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/email")
+def dashboard_email():
+    return render_template("dashboard/email_verification.html")
+
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/2fa")
+def dashboard_2fa():
+    return render_template("dashboard/two_factor.html")
+
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/logout")
+def dashboard_logout():
+    return render_template("dashboard/logout.html")
+    # OR redirect to logout logic if you want
+
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/about")
+def dashboard_about():
+    return render_template("dashboard/about.html")
+
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/help")
+def dashboard_help():
+    return render_template("dashboard/help.html")
+
+
+
+# -------------------------------------------------------------------
+
+@app.get("/dashboard/bookmarks")
+def dashboard_bookmarks():
+    return render_template("dashboard/bookmarks.html")
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -4,7 +4,7 @@
         <img
             id="profilePreview"
             {% if profile.pic %}
-            src="{{ url_for('media', filename='upload/' ~ profile.pic) }}"
+            src="{{ url_for('media', filename='uploads/' ~ profile.pic) }}"
             {% else %}
             src="{{ url_for('static', filename='images/prf.jpeg') }}"
             {% endif %}

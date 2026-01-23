@@ -1,0 +1,11 @@
+.dashboard-container {
+    height: 100vh;
+    padding: var(--space-md);
+    display: flex;
+    gap: var(--gap-lg);
+}
+
+.main-content {
+    flex-grow: 1;
+    border: 2px solid var(--border-primary);
+}
