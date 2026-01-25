@@ -1,0 +1,13 @@
+{% for reply in replies %}
+    {% include "comments/reply-item.html" %}
+{% endfor %}
+
+{% if replies|length == 10 %}
+<button
+    hx-get="{{ url_for('comments.load_replies', comment_id=comment_id, offset=next_offset) }}"
+    hx-target="this"
+    hx-swap="outerHTML"
+>
+    Show more replies
+</button>
+{% endif %}

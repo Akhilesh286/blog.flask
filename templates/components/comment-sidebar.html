@@ -1,0 +1,63 @@
+<!-- hide-comment -->
+
+<div id="comment-box" class="comment-box hide-comment">
+    <div class="resize-handle"></div>
+    <div class="comment-body">
+        <div id="comment-panel" class="comments">
+            <!-- comments go here -->
+        </div>
+        <div class="comment-input">
+            <p id="replyingTo"></p>
+            <form
+                id="comment-form"
+                hx-post="{{ url_for('comments.add_comment', post_id=post.id) }}"
+                hx-target="#comment-panel"
+                hx-swap="afterbegin"
+                hx-on::after-request="this.reset(); resetReplyPreview();"
+            >
+            <div class="comment-submit">
+                    <textarea id="chatInput" name="content" rows="1" required></textarea>
+                    <input type="hidden" id="parentId" name="parentId" value="">
+                    <button type="submit">
+                        <i class="bi bi-send normal-icon"></i>
+                        <i class="bi bi-send-fill hover-icon"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function startReply(parentId) {
+    document.getElementById("replyingTo").style.display = "block";
+    document.getElementById("parentId").value = parentId;
+    document.getElementById("chatInput").focus();
+
+    toggleReplies(parentId);
+}
+
+
+function resetReplyPreview() {
+    setTimeout(() => {
+        document.getElementById("replyingTo").style.display = "none";
+        document.getElementById("replyingTo").innerHTML = "";
+        document.getElementById("parentId").value = "";
+    }, 200);
+}
+document.body.addEventListener("htmx:configRequest", function (e) {
+    const form = e.target;
+    if (form.id !== "comment-form") return;
+
+    const parentId = document.getElementById("parentId").value;
+
+    if (parentId) {
+        form.setAttribute("hx-target", `#replies-${parentId}`);
+        form.setAttribute("hx-swap", "afterbegin");
+    } else {
+        form.setAttribute("hx-target", "#comment-panel");
+        form.setAttribute("hx-swap", "afterbegin");
+    }
+});
+
+</script>

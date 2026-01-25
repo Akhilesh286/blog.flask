@@ -6,14 +6,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/like-section.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bookmark-section.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comment-sidebar.css') }}">
 
 {% endblock %}
 
 {% block body %}
-    
-    <div id="comment-box" class="comment-box hide-comment">
-    <div class="resize-handle"></div>
-    </div>
+    {% include 'components/comment-sidebar.html' %}
     <section class="main-body">
         <div class="container">
             <div class="cnt">
@@ -25,7 +23,16 @@
                 <div class="author-action">
                     <div class="action-row">
                         <div class="comment-btn action-btns">
-                            <button id="toggle-comment">comment</button>
+                            <button
+                                hx-get="{{ url_for('comments.load_post_comments', post_id=post.id) }}"
+                                hx-target="#comment-panel"
+                                hx-swap="innerHTML"
+                                id="toggle-comment"
+                                class="btn btn-primary toggle-comment"
+                            >
+                                Comment
+                            </button>
+
                         </div>
                         <div id="bookmark-section">
                             {% include "bookmark-section.html" %}

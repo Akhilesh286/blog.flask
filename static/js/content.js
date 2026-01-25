@@ -32,3 +32,15 @@ function stopDrag() {
     document.removeEventListener("mousemove", resize);
     document.removeEventListener("mouseup", stopDrag);
 }
+
+
+// Comment Input
+const input = document.getElementById("chatInput");
+
+input.addEventListener("input", () => {
+    input.style.height = "auto"; // reset height
+    input.style.height = Math.min(input.scrollHeight, 150) + "px"; // max auto-expand height
+});
+
+
+// Toogle comment replies 

@@ -1,0 +1,112 @@
+.comment-box {
+    position: absolute;
+    display: flex;
+    top: 0;
+    right: 0;
+    background-color: var(--foreground);
+    height: 100%;
+    min-width: 30%;
+    width: 30%;
+}
+
+.resize-handle {
+    width: 5px;
+    height: 100%;
+    background: var(--text-caption);
+    cursor: ew-resize;
+    left: 0;
+    top: 0;
+}
+
+.hide-comment {
+    display: none;
+}
+
+.comment-body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--background-extra);
+}
+
+.comments {
+    flex-grow: 1;
+    /* border: 2px solid rebeccapurple; */
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    
+}
+
+.comment-input {
+    width: 100%;
+    background-color: var(--background-2extra);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    /* margin: var(--space-xl) 0 var(--space-2xl) 0; */
+    padding: var(--space-md);
+}
+.comment-submit {
+    width: 100%;
+    display: flex;
+    gap: var(--gap-md);
+}
+.comment-input p {
+    color: var(--text-subtitle);
+}
+
+.comment-submit textarea {
+    background-color: var(--background-extra);
+    color: var(--text-title);
+    border: none;
+    padding: var(--space-sm);
+    outline: none;
+    border-radius: var(--radius-lg);
+    flex-grow: 1;
+    min-height: 40px; 
+    max-height: 150px;
+    overflow-y: auto; 
+    resize: none;
+}
+.comment-submit textarea:focus {
+    background-color: var(--background);
+}
+
+.comment-submit button {
+    all: unset;
+    cursor: pointer;
+    color: var(--color-success);
+    font-size: var(--font-size-title);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment-submit i {
+    transition: transform .15s ease;
+}
+
+/* Hover icon swap */
+.hover-icon {
+    display: none;
+}
+
+button:hover .normal-icon {
+    display: none;
+}
+
+button:hover .hover-icon {
+    display: inline;
+}
+
+/* Increase size when clicked */
+.comment-submit button:active i {
+    transform: scale(1.25);
+}
+
+/* Remove focus ring – optional */
+.comment-submit button:focus {
+    outline: none;
+    box-shadow: none;
+}

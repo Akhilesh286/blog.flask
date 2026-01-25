@@ -1,0 +1,37 @@
+<div class="comment" id="comment-{{ comment.id }}">
+    <div class="comment-header">
+        <strong>{{ comment.user.username }}</strong>
+        <span>{{ comment.created_at|timeago }}</span>
+    </div>
+
+    <p>{{ comment.content }}</p>
+
+    <button onclick="toggleReplies({{ comment.id }})">Show replies</button>
+
+    <div id="replies-{{ comment.id }}" class="replies"></div>
+
+    {% if current_user.is_authenticated %}
+    <button
+        hx-get="{{ url_for('comments.reply_preview', comment_id=comment.id) }}"
+        hx-target="#replyingTo"
+        hx-swap="innerHTML"
+        onclick="startReply({{ comment.id }})"
+        class="btn btn-sm btn-link"
+    >
+        Reply
+    </button>
+
+    {% endif %}
+</div>
+<script>
+function toggleReplies(commentId) {
+    const div = document.getElementById('replies-' + commentId);
+    if (div.innerHTML.trim()) {
+        div.innerHTML = ''; // hide replies
+    } else {
+        // trigger HTMX request
+        htmx.ajax('GET', `/comments/${commentId}/replies`, { target: div });
+    }
+}
+
+</script>

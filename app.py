@@ -7,7 +7,8 @@ from flask import (
     abort, 
     send_from_directory, 
     send_file,
-    make_response
+    make_response,
+    Blueprint
 )
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
@@ -21,13 +22,16 @@ from flask_login import (
 from sqlalchemy.orm import joinedload
 from werkzeug.utils import secure_filename
 from functools import wraps
-from datetime import datetime
 import os
 import uuid
 import re
 from markdown import markdown
+import humanize
+from datetime import datetime, timezone
 
 from models import db, User, Post, Profile, PostStatus, PostLike, Comment, Bookmark, Follow
+
+from routes.comments import comments_bp
 
 # -------------------------------------------------------------------
 # App setup
@@ -61,6 +65,11 @@ login_manager.init_app(app)
 def load_user(user_id):
     return db.session.get(User, int(user_id))
 
+# -------------------------------------------------------------------
+# Blueprint
+# -------------------------------------------------------------------
+
+app.register_blueprint(comments_bp)
 
 # -------------------------------------------------------------------
 # Helpers
@@ -112,13 +121,6 @@ def profile_pic():
 
     return send_file(image_path)
 
-
-@app.route("/components/profile-pic")
-@login_required
-def profile_pic_component():
-    return render_template("components/profile-pic.html")
-
-
 def post_status_converter(status):
     if status == "draft":
         return PostStatus.draft
@@ -130,6 +132,14 @@ def post_status_converter(status):
         return PostStatus.archived
     
 
+@app.template_filter("timeago")
+
+@app.template_filter("timeago")
+def timeago_filter(dt):
+    if not dt:
+        return ""
+    now = datetime.now(timezone.utc)
+    return humanize.naturaltime(now - dt)
 # -------------------------------------------------------------------
 # Routes
 # -------------------------------------------------------------------
@@ -359,70 +369,6 @@ def toggle_like(post_id):
 
     # Return updated like section (HTMX partial)
     return render_template("like-section.html", post=post)
-
-# -------------------------------------------------------------------
-
-@app.post("/posts/<int:post_id>/comment")
-@login_required
-def add_comment(post_id):
-    post = Post.query.get_or_404(post_id)
-    content = request.form.get("content")
-
-    if not content.strip():
-        abort(400, "Comment cannot be empty")
-
-    comment = Comment(
-        content=content,
-        user_id=current_user.id,
-        post_id=post.id
-    )
-
-    db.session.add(comment)
-    db.session.commit()
-
-    return redirect(url_for("view_post", post_id=post.id))
-
-
-# -------------------------------------------------------------------
-
-@app.post("/comments/<int:comment_id>/reply")
-@login_required
-def reply_comment(comment_id):
-    parent = Comment.query.get_or_404(comment_id)
-    content = request.form.get("content")
-
-    if not content.strip():
-        abort(400, "Reply cannot be empty")
-
-    reply = Comment(
-        content=content,
-        user_id=current_user.id,
-        post_id=parent.post_id,
-        parent_id=parent.id
-    )
-
-    db.session.add(reply)
-    db.session.commit()
-
-    return redirect(url_for("view_post", post_id=parent.post_id))
-
-
-# -------------------------------------------------------------------
-
-@app.post("/comments/<int:comment_id>/delete")
-@login_required
-def delete_comment(comment_id):
-    comment = Comment.query.get_or_404(comment_id)
-
-    if comment.user_id != current_user.id:
-        abort(403)
-
-    post_id = comment.post_id
-
-    db.session.delete(comment)
-    db.session.commit()
-
-    return redirect(url_for("view_post", post_id=post_id))
 
 
 # -------------------------------------------------------------------
@@ -724,7 +670,6 @@ def dashboard_help():
 @app.get("/dashboard/bookmarks")
 def dashboard_bookmarks():
     return render_template("dashboard/bookmarks.html")
-
 
 
 if __name__ == "__main__":
