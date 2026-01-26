@@ -7,9 +7,33 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard-sidebar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/posts.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/action-buttons.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/about.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/archive.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/bookmarks.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/comments.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/drafts.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/email_verification.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/followers.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/help.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/likes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/logout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/phone_verification.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/security.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/two_factor.css') }}">
+    
 {% endblock %}
 
 {% block body %}
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" id="deleteModalContent">
+            <!-- HTMX will load content here -->
+            </div>
+        </div>
+    </div>
 
     <div class="dashboard-container">
         {% include 'components/dashboard-sidebar.html' %}

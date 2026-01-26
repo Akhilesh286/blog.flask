@@ -1,0 +1,60 @@
+@import url(style.css);
+
+.post-container {
+    flex-grow: 1;
+    height: 100%;
+}
+
+.cnt:hover {
+    background-color: var(--background-extra);
+}
+
+.cnt {
+    border: var(--border-primary) 2px solid;
+    padding: var(--space-md);
+    border-radius: var(--radius-xl);
+    margin-top: var(--space-xl);
+}
+.cnt h1{
+    color: var(--text-title);
+    font-family: var(--font-family-secondary);
+}
+.cnt h5 {
+    color: var(--text-subtitle);
+}
+
+.user-button {
+    display: flex;
+    align-items: center;
+    margin: var(--space-md) 0;
+    justify-content: space-between;
+}
+.title-button {
+    display: flex;
+    align-items: center;
+    margin: var(--space-md) 0;
+    justify-content: space-between;
+}
+.cnt-usr {
+    display: flex;
+    gap: var(--gap-md);
+    align-items: center;
+    cursor: default;
+}
+.profile-pic {
+    width: 48px;
+    border-radius: var(--radius-full);
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+.cnt-usr p {
+    text-align: center;
+    margin: 0;
+}
+.cnt-tit{
+    cursor: pointer;
+}
+
+.self-user {
+    color: var(--color-success);
+}

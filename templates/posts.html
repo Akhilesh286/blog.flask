@@ -1,21 +1,40 @@
 {% for post in posts %}
-<a href="/post/{{post.slug}}" style="all: unset;">
-    <div class="cnt">
+<div class="cnt" id="post-{{ post.id }}">
+    <div class="title-button">
+        <a href="{{ url_for('content', slug=post.slug ) }}" style="all: unset;">
         <div class="cnt-tit">
             <h1>{{post.title}}</h1>
             <h5>{{post.description}}</h5>
         </div>
-        
-        <div class="cnt-usr">
-        <img class="profile-pic"
-        {% if post.author.profile.pic %}
-            src="{{ url_for('media', filename='uploads/' ~ post.author.profile.pic) }}" 
-            {% else %}
-            src="{{ url_for('static',filename='images/prf.jpeg')}}" 
-            {% endif %}
-            alt="" srcset="" style="border-radius: 50%;">
-            <p>{{post.author.username}}</p >
+        </a>
+        <div class="action-button">
+        {% if align_with == "title" %}
+            {% include action_button %}
+        {% endif %}
         </div>
     </div>
-</a>
+
+<div class="user-button">
+    {% if post.author != current_user %}
+    <div class="cnt-usr">
+        <img class="profile-pic"
+        {% if post.author.profile.pic %}
+        src="{{ url_for('media', filename='uploads/' ~ post.author.profile.pic) }}" 
+        {% else %}
+        src="{{ url_for('static',filename='images/prf.jpeg')}}" 
+        {% endif %}
+        alt="" srcset="" style="border-radius: 50%;">
+        <p>{{post.author.username}}</p >
+    </div>
+        
+    {% else %}
+    <p class="self-user">< You ></p>
+    {% endif %}
+    <div class="action-button">
+        {% if align_with == "user" %}
+            {% include action_button %}
+        {% endif %}
+    </div>
+</div>
+</div>
 {% endfor %}

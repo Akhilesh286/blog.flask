@@ -4,23 +4,21 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/posts.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/action-buttons.css') }}">
 {% endblock %}
 
 {% block body %}
 
 {% include 'nav.html' %}
 
-<!-- <h1>{{is_author}}</h1>
-<h1></h1>
-  -->
 <section style="margin-top: 5rem;">
     <div style="margin-left: 20%;margin-right: 20%;">
-        <div id="post-container">
-            {% include "posts.html" %}
+        <div class="post-container">
+            {% with action_button='action-buttons/delete-publish.html', align_with='title' %}
+                {% include 'posts.html' %}
+            {% endwith %}
         </div>
-
-        <div id="loader" style="display:none;">Loading...</div>
-
     </div>
 </section>
 

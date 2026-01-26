@@ -1,0 +1,22 @@
+<div class="dropdown">
+    <button class="dot-button" data-bs-toggle="dropdown">
+        <i class="bi bi-three-dots-vertical"></i>
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item publish" href="/posts/{{post.id}}/publish">Publish</a></li>
+        <li>
+            <a 
+                class="dropdown-item delete"
+                hx-get="/posts/confirm-delete/{{ post.id }}"
+                hx-target="#deleteModalContent"
+                hx-trigger="click"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteModal"
+                href="#"
+            >
+                Delete
+            </a>
+        </li>
+
+    </ul>
+</div>

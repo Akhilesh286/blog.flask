@@ -121,6 +121,12 @@ def profile_pic():
 
     return send_file(image_path)
 
+# endpoint to get current profilepic
+@app.route("/components/profile-pic")
+def profile_pic_img():
+    return render_template('/components/profile-pic.html')
+
+
 def post_status_converter(status):
     if status == "draft":
         return PostStatus.draft
@@ -130,9 +136,7 @@ def post_status_converter(status):
         return PostStatus.published
     else:
         return PostStatus.archived
-    
 
-@app.template_filter("timeago")
 
 @app.template_filter("timeago")
 def timeago_filter(dt):
@@ -140,6 +144,8 @@ def timeago_filter(dt):
         return ""
     now = datetime.now(timezone.utc)
     return humanize.naturaltime(now - dt)
+
+
 # -------------------------------------------------------------------
 # Routes
 # -------------------------------------------------------------------
@@ -234,7 +240,7 @@ def sign_up():
             password_hash=hashed,
         )
 
-        db.session.add(user)
+        db.session.search(user)
         db.session.commit()
 
         return redirect(url_for("sign_in"))
@@ -336,9 +342,12 @@ def create_post():
 
 @app.route("/post/<slug>")
 def content(slug):
-    post = Post.query.filter_by(
-        slug=slug, status=PostStatus.published
-    ).first_or_404()
+    post = Post.query.filter_by(slug=slug).first_or_404()
+    is_author = (post.author_id == current_user.id)
+
+    if not is_author and post.status != PostStatus.published:
+        abort(404)
+
     html_content = markdown(
         post.content,
         extensions=["fenced_code", "tables", "toc", "nl2br"]
@@ -498,6 +507,21 @@ def search_people():
 
 # -------------------------------------------------------------------
 
+@app.route("/posts/<int:post_id>/publish")
+@login_required
+def publish_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if post.author_id != current_user.id:
+        abort(403)
+
+    post.status = PostStatus.published
+    db.session.commit()
+
+    return redirect(request.referrer or url_for("index"))
+
+# -------------------------------------------------------------------
+
 @app.route("/posts/<int:post_id>/update", methods=["GET", "POST"])
 @login_required
 def update_post(post_id):
@@ -536,7 +560,8 @@ def archive_post(post_id):
     post.status = PostStatus.archived
     db.session.commit()
 
-    return redirect(url_for("user_profile"))
+    return redirect(request.referrer or url_for("index"))
+
 
 
 # -------------------------------------------------------------------
@@ -567,7 +592,21 @@ def delete_post(post_id):
 
 @app.get("/dashboard/drafts")
 def dashboard_drafts():
-    return render_template("dashboard/drafts.html")
+    page = request.args.get("page", 1, type=int)
+    per_page = 10
+
+    stmt = (
+        db.select(Post)
+        .where(
+            Post.author_id == current_user.id,
+            Post.status == PostStatus.draft
+        )
+        .order_by(Post.id.desc())
+    )
+
+    posts = db.paginate(stmt, page=page, per_page=per_page, error_out=False)
+
+    return render_template("dashboard/drafts.html", posts=posts)
 
 
 # -------------------------------------------------------------------
@@ -582,7 +621,21 @@ def dashboard_likes():
 
 @app.get("/dashboard/archive")
 def dashboard_archive():
-    return render_template("dashboard/archive.html")
+    page = request.args.get("page", 1, type=int)
+    per_page = 10
+
+    stmt = (
+        db.select(Post)
+        .where(
+            Post.author_id == current_user.id,
+            Post.status == PostStatus.archived
+        )
+        .order_by(Post.id.desc())
+    )
+
+    posts = db.paginate(stmt, page=page, per_page=per_page, error_out=False)
+
+    return render_template("dashboard/archive.html", posts=posts)
 
 
 # -------------------------------------------------------------------
@@ -669,7 +722,14 @@ def dashboard_help():
 
 @app.get("/dashboard/bookmarks")
 def dashboard_bookmarks():
-    return render_template("dashboard/bookmarks.html")
+    posts = (
+        Post.query
+            .join(Bookmark)
+            .filter(Bookmark.user_id == current_user.id)
+            .order_by(Post.id.desc())
+            .all()
+    )
+    return render_template("dashboard/bookmarks.html", posts=posts)
 
 
 if __name__ == "__main__":

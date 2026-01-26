@@ -36,10 +36,10 @@ nav img {
 <footer>
     <nav>
         <div class="foot-nav">
-            <a href="/"><img src="{{ url_for('static',filename='icons/home.svg')}}" alt="" srcset=""></a>
-            <a href="/search"><img src="{{ url_for('static',filename='icons/search.svg')}}" alt="" srcset=""></a>
-            <a href="/create"><img src="{{ url_for('static',filename='icons/add_circle.svg')}}" alt="" srcset=""></a>
-            <a href="/profile" 
+            <a href="{{ url_for('index' ) }}"><img src="{{ url_for('static',filename='icons/home.svg')}}" alt="" srcset=""></a>
+            <a href="{{ url_for('search' ) }}"><img src="{{ url_for('static',filename='icons/search.svg')}}" alt="" srcset=""></a>
+            <a href="{{ url_for('create_post' ) }}"><img src="{{ url_for('static',filename='icons/add_circle.svg')}}" alt="" srcset=""></a>
+            <a href="{{ url_for('user_profile' ) }}" 
                 hx-get="/components/profile-pic"
                 hx-trigger="load"
                 hx-target="this"
