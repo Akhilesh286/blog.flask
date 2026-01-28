@@ -186,7 +186,8 @@ def index():
 
 @app.route("/test")
 def test():
-    return render_template("test.html")
+    users = User.query.all()
+    return render_template("test.html", users=users)
 
 # -------------------------------------------------------------------
 
@@ -240,7 +241,7 @@ def sign_up():
             password_hash=hashed,
         )
 
-        db.session.search(user)
+        db.session.add(user)
         db.session.commit()
 
         return redirect(url_for("sign_in"))
@@ -414,6 +415,36 @@ def toggle_bookmark(post_id):
 
 @app.post("/users/<int:user_id>/follow")
 @login_required
+def toggle_follow(user_id):
+    if user_id == current_user.id:
+        return "Cannot follow yourself", 400
+
+    target_user = User.query.get_or_404(user_id)
+
+    existing = Follow.query.filter_by(
+        follower_id=current_user.id,
+        following_id=user_id
+    ).first()
+
+    if existing:
+        db.session.delete(existing)
+        db.session.commit()
+    else:
+        follow = Follow(
+            follower_id=current_user.id,
+            following_id=user_id
+        )
+        db.session.add(follow)
+        db.session.commit()
+
+    db.session.refresh(target_user)
+
+    return render_template("follow-section.html", target_user=target_user)
+
+# -------------------------------------------------------------------
+
+@app.post("/users/<int:user_id>/follow")
+@login_required
 def follow_user(user_id):
     user = User.query.get_or_404(user_id)
 
@@ -500,7 +531,7 @@ def search_people():
 
 
     return render_template(
-        "search-peoples.html",
+        "users.html",
         peoples=results
     )
 
@@ -610,10 +641,21 @@ def dashboard_drafts():
 
 
 # -------------------------------------------------------------------
-
 @app.get("/dashboard/likes")
+@login_required
 def dashboard_likes():
-    return render_template("dashboard/likes.html")
+    page = request.args.get("page", 1, type=int)
+    per_page = 10
+
+    posts = (
+        Post.query
+            .join(PostLike)
+            .filter(PostLike.user_id == current_user.id)
+            .order_by(Post.id.desc())
+            .paginate(page=page, per_page=per_page, error_out=False)
+    )
+
+    return render_template("dashboard/likes.html", posts=posts)
 
 
 
@@ -647,9 +689,25 @@ def dashboard_comments():
 
 # -------------------------------------------------------------------
 
-@app.get("/dashboard/following")
-def dashboard_following():
-    return render_template("dashboard/following.html")
+@app.get("/dashboard/connections")
+def dashboard_connections():
+    page = request.args.get("page", 1, type=int)
+
+    followers_users = (
+        User.query
+            .join(Follow, Follow.follower_id == User.id)
+            .filter(Follow.following_id == current_user.id)
+            .paginate(page=page, per_page=20, error_out=False)
+    )
+
+    following_users = (
+        User.query
+            .join(Follow, Follow.following_id == User.id)
+            .filter(Follow.follower_id == current_user.id)
+            .paginate(page=page, per_page=20, error_out=False)
+    )
+    
+    return render_template("dashboard/connections.html", followers_users=followers_users, following_users=following_users)
 
 
 
@@ -657,8 +715,9 @@ def dashboard_following():
 
 @app.get("/dashboard/followers")
 def dashboard_followers():
-    return render_template("dashboard/followers.html")
+    page = request.args.get("page", 1, type=int)
 
+    return render_template("dashboard/followers.html")
 
 
 # -------------------------------------------------------------------

@@ -1,0 +1,23 @@
+{% set already_following = target_user.followers.filter_by(follower_id=current_user.id).first() %}
+
+{% if already_following %}
+    <button
+        hx-post="/users/{{ target_user.id }}/follow"
+        hx-trigger="click"
+        hx-target="#follow-section"
+        hx-swap="innerHTML"
+        class="unfollow-btn"
+    >
+        Following ✔
+    </button>
+{% else %}
+    <button
+        hx-post="/users/{{ target_user.id }}/follow"
+        hx-trigger="click"
+        hx-target="#follow-section"
+        hx-swap="innerHTML"
+        class="follow-btn"
+    >
+        Follow +
+    </button>
+{% endif %}

@@ -81,13 +81,15 @@ class User(db.Model, UserMixin, TimestampMixin, SoftDeleteMixin):
         "Follow",
         foreign_keys="[Follow.follower_id]",
         back_populates="follower",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
+        lazy="dynamic"
     )
     followers = relationship(
         "Follow",
         foreign_keys="[Follow.following_id]",
         back_populates="following",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
+        lazy="dynamic"
     )
 
 

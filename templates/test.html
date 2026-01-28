@@ -1,115 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Perfect Split Markdown Editor</title>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
-<script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/markdown/markdown.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/xml/xml.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-<style>
-html, body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-}
-
-/* --- TRUE FLUID SPLIT --- */
-.wrapper {
-    display: grid;
-    grid-template-columns: 1fr 6px 1fr;   /* editor | splitter | preview */
-    width: 100%;
-    height: 100vh;
-}
-
-/* Panels */
-.editor-panel {
-    overflow: hidden;
-}
-
-.preview-panel {
-    overflow-y: auto;
-    padding: 20px;
-    background: #fff;
-    border-left: 1px solid #ccc;
-}
-
-/* Splitter */
-.splitter {
-    background: #aaa;
-    cursor: col-resize;
-    user-select: none;
-}
-
-/* CodeMirror */
-.CodeMirror {
-    height: 100%;
-    font-size: 15px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/users.css' ) }}">
 </head>
-
-<body>
-
-<div class="wrapper" id="wrapper">
-    <div class="editor-panel">
-        <textarea id="editor"></textarea>
-    </div>
-
-    <div class="splitter" id="splitter"></div>
-
-    <div class="preview-panel markdown-body" id="preview"></div>
-</div>
-
-<script>
-// CodeMirror
-const cm = CodeMirror.fromTextArea(document.getElementById("editor"), {
-  mode: "markdown",
-  lineNumbers: true,
-  lineWrapping: true,
-});
-
-const preview = document.getElementById("preview");
-
-// Markdown preview update
-cm.on("change", () => {
-    preview.innerHTML = marked.parse(cm.getValue());
-});
-
-// GRID SPLITTER
-const wrapper = document.getElementById("wrapper");
-const splitter = document.getElementById("splitter");
-
-let dragging = false;
-
-splitter.addEventListener("mousedown", () => {
-    dragging = true;
-    document.body.style.cursor = "col-resize";
-});
-
-document.addEventListener("mousemove", (e) => {
-    if (!dragging) return;
-
-    const totalWidth = wrapper.offsetWidth;
-
-    let leftWidth = e.clientX;
-
-    // Boundaries
-    if (leftWidth < 200) leftWidth = 200;
-    if (leftWidth > totalWidth - 200) leftWidth = totalWidth - 200;
-
-    // Set grid columns directly
-    wrapper.style.gridTemplateColumns = `${leftWidth}px 6px 1fr`;
-});
-
-document.addEventListener("mouseup", () => {
-    dragging = false;
-    document.body.style.cursor = "default";
-});
-</script>
-
+<body style="height: 100vh;margin: 0;">
+    <style>
+        .users-box {
+            display: flex;
+            flex-direction: column;
+            width: fit-content;
+            height: 100%;
+            padding: 1rem;
+            box-sizing: border-box;
+            gap: var(--gap-md);
+            overflow-y: scroll;
+        }
+        .follow-user {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: fit-content;
+        }
+        .follow-title {
+            border-bottom: 2px solid rebeccapurple;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+    
 </body>
 </html>

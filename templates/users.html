@@ -1,8 +1,8 @@
-{% for people in peoples %}
+{% for people in users %}
     <div class="author-data">
         <img class="profile-pic"
             {% if people.profile.pic %}
-            src="{{ url_for('media', filename='upload/' ~ people.profile.pic) }}" 
+            src="{{ url_for('media', filename='uploads/' ~ people.profile.pic) }}" 
             {% else %}
             src="{{ url_for('static',filename='images/prf.jpeg')}}" 
             {% endif %}

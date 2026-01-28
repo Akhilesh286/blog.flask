@@ -46,34 +46,6 @@
     gap: var(--gap-md);
     margin-top: var(--space-md);
 }
-
-.author-action {
-    display: flex;
-    align-items: center;
-    margin: var(--space-md) 0;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.profile-pic {
-    width: 48px;
-    border-radius: var(--radius-full);
-    aspect-ratio: 1;
-    object-fit: cover;
-}
-
-.author-data {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-md);
-    border: var(--border-primary) 1px solid;
-    width: 20rem;
-    padding: var(--space-xs);
-}
-.author-data p {
-    margin: 0;
-}
-
 .cnt {
     border: var(--border-primary) 2px solid;
     padding: var(--space-md);
