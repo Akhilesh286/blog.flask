@@ -1,3 +1,5 @@
+@import url(style.css);
+
 .dashboard-container {
     height: 100vh;
     padding: var(--space-md);
@@ -6,6 +8,7 @@
 }
 
 .main-content {
+    height: 100%;
     flex-grow: 1;
     border: 2px solid var(--border-primary);
 }

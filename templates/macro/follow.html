@@ -1,0 +1,5 @@
+{% macro follow_button(target_user, current_user) %}
+    {% set is_following = target_user.followers.filter_by(follower_id=current_user.id).first() %}
+    {% set user_id = target_user.id %}
+    {% include "follow-section.html" %}
+{% endmacro %}

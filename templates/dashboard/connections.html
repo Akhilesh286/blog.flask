@@ -1,11 +1,24 @@
+<div class="follow">
     <div class="follow-user">
         <div class="follow-title">
             <h1>Followers</h1>
         </div>
         <div class="users-box">
-        {% with users=followers_users %}
+            {% with users=followers_users %}
             {% include 'users.html'   %}
-        {% endwith %}
-        
+            {% endwith %}
+            
         </div>
     </div>
+    <div class="follow-user">
+        <div class="follow-title">
+            <h1>Followings</h1>
+        </div>
+        <div class="users-box">
+            {% with users=following_users %}
+            {% include 'users.html'   %}
+            {% endwith %}
+            
+        </div>
+    </div>
+</div>

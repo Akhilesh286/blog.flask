@@ -416,6 +416,7 @@ def toggle_bookmark(post_id):
 @app.post("/users/<int:user_id>/follow")
 @login_required
 def toggle_follow(user_id):
+
     if user_id == current_user.id:
         return "Cannot follow yourself", 400
 
@@ -428,61 +429,28 @@ def toggle_follow(user_id):
 
     if existing:
         db.session.delete(existing)
-        db.session.commit()
     else:
-        follow = Follow(
+        new_follow = Follow(
             follower_id=current_user.id,
             following_id=user_id
         )
-        db.session.add(follow)
-        db.session.commit()
+        db.session.add(new_follow)
 
-    db.session.refresh(target_user)
+    db.session.commit()
 
-    return render_template("follow-section.html", target_user=target_user)
-
-# -------------------------------------------------------------------
-
-@app.post("/users/<int:user_id>/follow")
-@login_required
-def follow_user(user_id):
-    user = User.query.get_or_404(user_id)
-
-    if user.id == current_user.id:
-        abort(400, "You cannot follow yourself")
-
-    existing = Follow.query.filter_by(
+    # Required for component rendering
+    is_following = Follow.query.filter_by(
         follower_id=current_user.id,
         following_id=user_id
     ).first()
 
-    if existing:
-        return redirect(url_for("profile", user_id=user_id))
+    element_id = f"c-follow-{user_id}"
 
-    follow = Follow(
-        follower_id=current_user.id,
-        following_id=user_id
+    return render_template(
+        "follow-section.html",
+        user_id=user_id,
+        is_following=is_following
     )
-    db.session.add(follow)
-    db.session.commit()
-
-    return redirect(url_for("profile", user_id=user_id))
-
-
-# -------------------------------------------------------------------
-
-@app.post("/users/<int:user_id>/unfollow")
-@login_required
-def unfollow_user(user_id):
-    follow = Follow.query.filter_by(
-        follower_id=current_user.id,
-        following_id=user_id
-    ).first_or_404()
-
-    db.session.delete(follow)
-    db.session.commit()
-
-    return redirect(url_for("profile", user_id=user_id))
 
 
 # -------------------------------------------------------------------
@@ -532,7 +500,7 @@ def search_people():
 
     return render_template(
         "users.html",
-        peoples=results
+        users=results
     )
 
 

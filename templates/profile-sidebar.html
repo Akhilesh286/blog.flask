@@ -22,12 +22,12 @@
     </div>
     <div class="follow-stats">
         <div class="followers">
-            <h1>{{ user.followers | length }}</h1>
+            <h1>{{ user.followers.count() }}</h1>
             <p>Followers</p>
         </div>
 
         <div class="following">
-            <h1>{{ user.following | length }}</h1>
+            <h1>{{ user.following.count() }}</h1>
             <p>Following</p>
         </div>
     </div>

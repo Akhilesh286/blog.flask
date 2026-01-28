@@ -1,13 +1,17 @@
+{% from 'macro/follow.html' import follow_button %}
 {% for people in users %}
     <div class="author-data">
-        <img class="profile-pic"
-            {% if people.profile.pic %}
-            src="{{ url_for('media', filename='uploads/' ~ people.profile.pic) }}" 
-            {% else %}
-            src="{{ url_for('static',filename='images/prf.jpeg')}}" 
-            {% endif %}
-            alt=""
-        >
-        <p>{{people.username}}</p >
+    <img class="profile-pic"
+        {% if people.profile.pic %}
+        src="{{ url_for('media', filename='uploads/' ~ people.profile.pic) }}" 
+        {% else %}
+        src="{{ url_for('static',filename='images/prf.jpeg')}}" 
+        {% endif %}
+        alt=""
+    >
+    <p>{{people.username}}</p >
+    <div class="follow-btn action-btns" id="{{'follow-section-' ~ people.id}}">
+        {{ follow_button(people, current_user) }}
+    </div>
     </div>
 {% endfor %}
