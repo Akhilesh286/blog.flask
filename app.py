@@ -41,7 +41,7 @@ app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "hidden-gem"
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql+psycopg2://bloguser:strongpassword@localhost:5432/blogdb"
+    "postgresql+psycopg2://chatapp:J8nH?32s@localhost:5432/blogdb"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 

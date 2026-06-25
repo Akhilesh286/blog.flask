@@ -3,7 +3,7 @@
     <div class="profile-pic">      
         <img
             id="profilePreview"
-            {% if profile.pic %}
+            {% if profile and profile.pic %}
             src="{{ url_for('media', filename='uploads/' ~ profile.pic) }}"
             {% else %}
             src="{{ url_for('static', filename='images/prf.jpeg') }}"
@@ -14,11 +14,17 @@
     </div>
     <p class="user-username">{{user.username}}</p>
     <div class="profile-details">
+        {% if profile %}
         <p class="user-name">{{profile.first_name}} {{profile.last_name}}</p>
+        {% if profile.website %}
         <a class="user-web" href="{{ profile.website if profile.website.startswith('http') else 'https://' + profile.website }}">
             {{ profile.website }}
         </a>
+        {% endif %}
         <p class="user-bio">{{profile.bio}}</p>
+        {% else %}
+        <p class="user-name">No profile</p>
+        {% endif %}
     </div>
     <div class="follow-stats">
         <div class="followers">
