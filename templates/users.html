@@ -1,17 +1,31 @@
 {% from 'macro/follow.html' import follow_button %}
-{% for people in users %}
-    <div class="author-data">
-    <img class="profile-pic"
-        {% if people.profile.pic %}
-        src="{{ url_for('media', filename='uploads/' ~ people.profile.pic) }}" 
-        {% else %}
-        src="{{ url_for('static',filename='images/prf.jpeg')}}" 
-        {% endif %}
-        alt=""
+
+{% for person in users %}
+<div class="user-row">
+  <a href="{{ url_for('profile', username=person.username) }}" class="user-row-main">
+    <img
+      class="avatar"
+      {% if person.profile and person.profile.pic %}
+      src="{{ url_for('media', filename='uploads/' ~ person.profile.pic) }}"
+      {% else %}
+      src="{{ url_for('static', filename='images/prf.jpeg') }}"
+      {% endif %}
+      alt=""
     >
-    <p>{{people.username}}</p >
-    <div class="follow-btn action-btns" id="{{'follow-section-' ~ people.id}}">
-        {{ follow_button(people, current_user) }}
+    <div class="user-row-info">
+      <span class="user-row-name">{{ person.username }}</span>
+      {% if person.profile %}
+      <span class="user-row-bio">{{ person.profile.bio | truncate(60) }}</span>
+      {% endif %}
     </div>
-    </div>
+  </a>
+  <div class="user-row-action">
+    {{ follow_button(person, current_user) }}
+  </div>
+</div>
+{% else %}
+<div class="empty-state">
+  <i class="bi bi-people"></i>
+  <p>No users found</p>
+</div>
 {% endfor %}

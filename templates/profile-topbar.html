@@ -1,10 +1,31 @@
-<nav class="profile-topbar">
-    {% if is_current_user %}
-    <button id="backBtn">Back</button>
-    <a href="/dashboard">dash</a>
-    {% else %}
-    <button id="backBtn">Back</button>
-    <button>Follow</button>
-    <button>Share</button>
-    {% endif %}
-</nav>
+<div class="profile-topbar">
+  <button id="backBtn" class="btn btn-ghost btn-sm"><i class="bi bi-arrow-left"></i> Back</button>
+  {% if is_current_user %}
+  <a href="{{ url_for('dashboard') }}" class="btn btn-ghost btn-sm"><i class="bi bi-grid"></i> Dashboard</a>
+  {% else %}
+  {% set user_id = user.id %}
+  {% set is_following = current_user.is_authenticated and user.followers.filter_by(follower_id=current_user.id).first() %}
+  <div class="profile-topbar-actions">
+    <div id="follow-section-topbar">
+      {% include "follow-section.html" %}
+    </div>
+    <button class="btn btn-ghost btn-sm"><i class="bi bi-share"></i> Share</button>
+  </div>
+  {% endif %}
+</div>
+
+<style>
+.profile-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-md);
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid var(--foreground);
+  width: 100%;
+}
+.profile-topbar-actions {
+  display: flex;
+  gap: var(--gap-sm);
+}
+</style>

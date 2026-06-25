@@ -1,20 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Home Page{% endblock %}
-
-{% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-{% endblock %}
+{% block title %}Welcome{% endblock %}
 
 {% block body %}
-
-
-    <div class="container">
-        <a href="/sign-in">sign-in</a>
-    </div>
-
-    {% block scripts %}
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    {% endblock %}
-
+<main class="auth-page">
+  <div class="auth-card" style="text-align:center">
+    <i class="bi bi-journal-text" style="font-size:4rem;color:var(--color-primary);margin-bottom:var(--space-md);display:block"></i>
+    <h1 style="font-family:var(--font-family-secondary);font-size:var(--font-size-title);color:var(--text-title);margin-bottom:var(--space-sm)">Flask Blog</h1>
+    <p style="color:var(--text-body);margin-bottom:var(--space-xl)">A modern, minimal blogging platform.</p>
+    <a href="/sign-in" class="btn btn-primary btn-lg">Get Started</a>
+  </div>
+</main>
 {% endblock %}

@@ -1,37 +1,53 @@
-<div class="comment" id="comment-{{ comment.id }}">
-    <div class="comment-header">
-        <strong>{{ comment.user.username }}</strong>
-        <span>{{ comment.created_at|timeago }}</span>
-    </div>
-
-    <p>{{ comment.content }}</p>
-
-    <button onclick="toggleReplies({{ comment.id }})">Show replies</button>
-
-    <div id="replies-{{ comment.id }}" class="replies"></div>
-
-    {% if current_user.is_authenticated %}
-    <button
-        hx-get="{{ url_for('comments.reply_preview', comment_id=comment.id) }}"
-        hx-target="#replyingTo"
-        hx-swap="innerHTML"
-        onclick="startReply({{ comment.id }})"
-        class="btn btn-sm btn-link"
-    >
-        Reply
+<div
+  class="thread {% if is_last %}thread-last{% endif %} {% if depth|default(0) > 0 %}thread-child{% endif %}"
+  id="comment-{{ comment.id }}"
+  data-depth="{{ depth | default(0) }}"
+>
+  <div class="thread-indent">
+    <div class="thread-line"></div>
+    <div class="thread-branch"></div>
+    <button class="thread-collapse-btn" title="Collapse thread" aria-label="Collapse thread">
+      <i class="bi bi-dash-circle"></i>
     </button>
-
-    {% endif %}
+  </div>
+  <div class="thread-main">
+    <div class="thread-header">
+      <a href="{{ url_for('profile', username=comment.user.username) }}" class="thread-author">
+        {{ comment.user.username }}
+      </a>
+      <span class="thread-time">{{ comment.created_at | timeago }}</span>
+    </div>
+    <div class="thread-content">{{ comment.content }}</div>
+    <div class="thread-actions">
+      <button
+        class="thread-action"
+        hx-get="{{ url_for('comments.load_reply_form', comment_id=comment.id, depth=depth|default(0) + 1) }}"
+        hx-target="#reply-form-{{ comment.id }}"
+        hx-swap="innerHTML"
+      >
+        Reply
+      </button>
+      {% if comment.replies %}
+      <button
+        class="thread-action"
+        id="thread-toggle-{{ comment.id }}"
+        hx-get="{{ url_for('comments.load_replies', comment_id=comment.id, depth=depth|default(0) + 1) }}"
+        hx-target="#thread-children-{{ comment.id }}"
+        hx-swap="innerHTML"
+        hx-on::after-request="this.style.display='none'"
+      >
+        {{ comment.replies | length }} {{ 'reply' if comment.replies | length == 1 else 'replies' }}
+      </button>
+      {% endif %}
+    </div>
+    <div id="reply-form-{{ comment.id }}" class="thread-reply-form"></div>
+    <div id="thread-children-{{ comment.id }}" class="thread-children">
+      <div class="thread-collapsed-preview" style="display:none">
+        <button class="thread-expand-btn">
+          <i class="bi bi-plus-circle"></i>
+          <span class="thread-collapsed-count"></span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
-<script>
-function toggleReplies(commentId) {
-    const div = document.getElementById('replies-' + commentId);
-    if (div.innerHTML.trim()) {
-        div.innerHTML = ''; // hide replies
-    } else {
-        // trigger HTMX request
-        htmx.ajax('GET', `/comments/${commentId}/replies`, { target: div });
-    }
-}
-
-</script>

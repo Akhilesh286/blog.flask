@@ -1,0 +1,22 @@
+<div class="dash-page">
+  <h2><i class="bi bi-shield-lock"></i> Security</h2>
+
+  <div class="post-card" style="margin-bottom:var(--space-lg)">
+    <h3 style="color:var(--text-title);margin-bottom:var(--space-md)">Change Password</h3>
+    <form method="post" action="{{ url_for('dashboard_security') if false else '#' }}" class="auth-form">
+      <div class="field">
+        <label for="current_password">Current Password</label>
+        <input type="password" name="current_password" id="current_password" class="input" placeholder="Enter current password">
+      </div>
+      <div class="field">
+        <label for="new_password">New Password</label>
+        <input type="password" name="new_password" id="new_password" class="input" placeholder="Enter new password">
+      </div>
+      <div class="field">
+        <label for="confirm_password">Confirm New Password</label>
+        <input type="password" name="confirm_password" id="confirm_password" class="input" placeholder="Confirm new password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-sm">Update Password</button>
+    </form>
+  </div>
+</div>

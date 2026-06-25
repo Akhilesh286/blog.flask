@@ -1,0 +1,17 @@
+<div class="dash-page">
+  <h2><i class="bi bi-envelope"></i> Email Verification</h2>
+
+  <div class="post-card" style="margin-bottom:var(--space-lg)">
+    <h3 style="color:var(--text-title);margin-bottom:var(--space-md)">Your Email</h3>
+    <p style="margin-bottom:var(--space-md)">{{ current_user.email }}</p>
+    {% if current_user.is_verified %}
+    <span class="badge badge-green"><i class="bi bi-check-circle"></i> Verified</span>
+    {% else %}
+    <span class="badge badge-yellow"><i class="bi bi-exclamation-triangle"></i> Not Verified</span>
+    <p style="margin-top:var(--space-md);font-size:var(--font-size-caption);color:var(--text-disabled)">
+      Click below to receive a verification email.
+    </p>
+    <button class="btn btn-primary btn-sm" style="margin-top:var(--space-sm)">Send Verification Email</button>
+    {% endif %}
+  </div>
+</div>

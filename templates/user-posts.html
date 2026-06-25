@@ -1,11 +1,26 @@
-<div class="user-posts">
-    {% for post in posts %}
-    <div class="post-card" id="post-{{post.id}}">
-        <a class="post" href="/post/{{post.slug}}">
-            <h1>{{post.title}}</h1>
-            <p>{{post.description}}</p>
-        </a>
-        
-    </div>
-    {% endfor %}
+{% for post in posts %}
+<article class="post-card" id="post-{{ post.id }}">
+  <a href="/post/{{ post.slug }}" class="post-title">
+    <h2>{{ post.title }}</h2>
+    {% if post.description %}
+    <p class="post-desc">{{ post.description }}</p>
+    {% endif %}
+  </a>
+  <div class="post-meta">
+    <span class="post-date">
+      <i class="bi bi-clock"></i>
+      {{ post.created_at | timeago }}
+    </span>
+    {% if post.status.name == 'draft' %}
+    <span class="badge badge-yellow">Draft</span>
+    {% elif post.status.name == 'archived' %}
+    <span class="badge badge-red">Archived</span>
+    {% endif %}
+  </div>
+</article>
+{% else %}
+<div class="empty-state">
+  <i class="bi bi-journal-text"></i>
+  <p>No posts yet.</p>
 </div>
+{% endfor %}

@@ -1,3 +1,33 @@
+<div class="comment-tree">
 {% for comment in comments %}
-    {% include "comments/comment-item.html" %}
+  {% with depth=0, is_last=loop.last %}
+    {% include 'comments/comment-item.html' %}
+  {% endwith %}
+{% else %}
+<div class="empty-state" style="padding:var(--space-lg)">
+  <i class="bi bi-chat-dots"></i>
+  <p>No comments yet. Be the first!</p>
+</div>
 {% endfor %}
+</div>
+
+<style>
+.thread[data-depth="0"] .thread-line,
+.thread[data-depth="0"] .thread-branch { background: var(--color-primary); }
+.thread[data-depth="1"] .thread-line,
+.thread[data-depth="1"] .thread-branch { background: var(--color-info); }
+.thread[data-depth="2"] .thread-line,
+.thread[data-depth="2"] .thread-branch { background: var(--color-accent); }
+.thread[data-depth="3"] .thread-line,
+.thread[data-depth="3"] .thread-branch { background: var(--color-warning); }
+.thread[data-depth="4"] .thread-line,
+.thread[data-depth="4"] .thread-branch { background: var(--color-orange); }
+.thread[data-depth="5"] .thread-line,
+.thread[data-depth="5"] .thread-branch { background: var(--color-success); }
+.thread[data-depth="6"] .thread-line,
+.thread[data-depth="6"] .thread-branch { background: var(--color-primary); }
+.thread[data-depth="7"] .thread-line,
+.thread[data-depth="7"] .thread-branch { background: var(--color-info); }
+.thread[data-depth="8"] .thread-line,
+.thread[data-depth="8"] .thread-branch { background: var(--color-accent); }
+</style>

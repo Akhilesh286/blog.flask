@@ -1,34 +1,58 @@
-<div class="modal-header">
-    <h5 class="modal-title">Delete Post</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
-</div>
-
-<div class="modal-body">
-    <p>Are you sure you want to delete this post?</p>
-
-    <div class="alert alert-secondary">
-        <strong>{{ post.title }}</strong>
-    </div>
-</div>
-
-<div class="modal-footer">
-    <button 
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-content" id="deleteModalContent">
+    <h3>Delete Post</h3>
+    <p>Are you sure you want to delete <strong style="color:var(--text-title)">{{ post.title }}</strong>? This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-bs-dismiss="modal">Cancel</button>
+      <form action="{{ url_for('archive_post', post_id=post.id) }}" method="POST" style="display:inline">
+        <button type="submit" class="btn btn-ghost">
+          <i class="bi bi-archive"></i> Archive Instead
+        </button>
+      </form>
+      <button
         class="btn btn-danger"
-        hx-delete="/posts/{{ post.id }}"
+        hx-delete="{{ url_for('delete_post', post_id=post.id) }}"
         hx-target="#post-{{ post.id }}"
         hx-swap="outerHTML"
         data-bs-dismiss="modal"
-    >
-        Delete
-    </button>
-
-    <button 
-        class="btn btn-warning"
-        hx-post="/posts/{{ post.id }}/archive"
-        hx-target="#post-{{ post.id }}"
-        hx-swap="outerHTML"
-        data-bs-dismiss="modal"
-    >
-        Archive
-    </button>
+      >
+        <i class="bi bi-trash"></i> Delete
+      </button>
+    </div>
+  </div>
 </div>
+
+<style>
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-md);
+}
+.modal-content {
+  background: var(--background-extra);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  max-width: 480px;
+  width: 100%;
+}
+.modal-content h3 {
+  color: var(--text-title);
+  margin-bottom: var(--space-md);
+}
+.modal-content p {
+  color: var(--text-body);
+  margin-bottom: var(--space-lg);
+}
+.modal-actions {
+  display: flex;
+  gap: var(--gap-md);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+</style>

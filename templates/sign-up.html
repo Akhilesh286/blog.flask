@@ -1,52 +1,42 @@
 {% extends "base.html" %}
 
-{% block title %}Home Page{% endblock %}
+{% block title %}Sign Up{% endblock %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/sign-in.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sign-in.css') }}">
 {% endblock %}
 
 {% block body %}
+<main class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Create account</h1>
+      <p>Join the blog community</p>
+    </div>
 
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
 
-    <section>
-        <dvi class="main">
-            <div class="img">
-                <img src="{{ url_for('static', filename='images/login.png') }}" alt="">
-                <div>
-                    <h1>SingUP</h1>
-                </div>
-            </div>
-            <div class="cnt">
-                <div class="cnt-txt">
-                    <h1>Welcome</h1>
-                    <h4>Let's log you in quickly</h4>
-                </div>
-                <form action="/sign-up" method="post">
-                    <div class="cnt-inp">
-                        <!-- <div>
-                            <input style="width: 34.5%;" type="text" name="first_name" id="first_name" placeholder="First Name">
-                            <input style="width: 34.5%;" type="text" name="lastname" id="lastname" placeholder="Last Name">
-                        
-                        </div> -->
-                        <input type="text" name="username" id="username" placeholder="Enter Your User Name">
-                        <input type="email" name="email" id="email" placeholder="Enter Your Email">
-                        <input style="margin-top: 2rem;" type="password" name="password" id="password" placeholder="Enter Your Password">
-                        <input type="password" name="repassword" id="repassword" placeholder="Re-Enter Your Password">
-                    </div>
-                    <div class="cnt-btn" style="display: flex;justify-content: space-between; width: 70%;margin-top: 2rem;">
-                        <button>SingUP</button>
-                        <p>Alrady have an account <span>?</span><br><a href="/sign-in">sign-in</a></p>
-                    </div>
-                </form>
-            </div>
-        </dvi>
-    </section>
+    <form action="/sign-up" method="post" class="auth-form">
+      <div class="field">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" class="input" placeholder="your-username" required>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" class="input" placeholder="you@example.com" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" class="input" placeholder="Create a password" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg auth-submit">Sign Up</button>
+    </form>
 
-
-
-    {% block scripts %}
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    {% endblock %}
-
+    <p class="auth-alt">
+      Already have an account? <a href="/sign-in">Sign in</a>
+    </p>
+  </div>
+</main>
 {% endblock %}

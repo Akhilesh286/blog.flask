@@ -1,26 +1,24 @@
-<div class="post-actions">
+{% set is_bookmarked = post.bookmarks.filter_by(user_id=current_user.id).first() %}
 
-    {% set is_bookmarked = post.bookmarks.filter_by(user_id=current_user.id).first() %}
-
-    {% if is_bookmarked %}
-        <button
-            hx-post="/posts/{{ post.id }}/bookmark"
-            hx-trigger="click"
-            hx-target="#bookmark-section"
-            hx-swap="innerHTML"
-            class="bookmarked-btn"
-        >
-            ★ Bookmarked (Undo)
-        </button>
-    {% else %}
-        <button
-            hx-post="/posts/{{ post.id }}/bookmark"
-            hx-trigger="click"
-            hx-target="#bookmark-section"
-            hx-swap="innerHTML"
-            class="bookmark-btn"
-        >
-            ☆ Bookmark
-        </button>
-    {% endif %}
-</div>
+{% if is_bookmarked %}
+<button
+  hx-post="/posts/{{ post.id }}/bookmark"
+  hx-trigger="click"
+  hx-target="#bookmark-section"
+  hx-swap="innerHTML"
+  class="btn btn-sm"
+  style="color:var(--color-warning);border-color:var(--color-warning);"
+>
+  <i class="bi bi-bookmark-fill"></i>
+</button>
+{% else %}
+<button
+  hx-post="/posts/{{ post.id }}/bookmark"
+  hx-trigger="click"
+  hx-target="#bookmark-section"
+  hx-swap="innerHTML"
+  class="btn btn-sm btn-ghost"
+>
+  <i class="bi bi-bookmark"></i>
+</button>
+{% endif %}

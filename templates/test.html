@@ -1,37 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/users.css' ) }}">
-</head>
-<body style="height: 100vh;margin: 0;">
-    <style>
-        .users-box {
-            display: flex;
-            flex-direction: column;
-            width: fit-content;
-            height: 100%;
-            padding: 1rem;
-            box-sizing: border-box;
-            gap: var(--gap-md);
-            overflow-y: scroll;
-        }
-        .follow-user {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: fit-content;
-        }
-        .follow-title {
-            border-bottom: 2px solid rebeccapurple;
-            width: 100%;
-            text-align: center;
-        }
-    </style>
-    
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Test{% endblock %}
+{% block body %}
+<main class="page">
+  <div class="container">
+    <h1 class="section-title">Test Page</h1>
+    <div class="post-container">
+      {% for user in users %}
+      <div class="post-card">
+        <div class="post-header">
+          <div class="post-author">
+            <img class="avatar avatar-sm" src="{{ url_for('static', filename='images/prf.jpeg') }}" alt="">
+            <span>{{ user.username }}</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock %}

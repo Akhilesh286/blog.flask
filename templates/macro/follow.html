@@ -1,5 +1,26 @@
 {% macro follow_button(target_user, current_user) %}
-    {% set is_following = target_user.followers.filter_by(follower_id=current_user.id).first() %}
-    {% set user_id = target_user.id %}
-    {% include "follow-section.html" %}
+  {% set user_id = target_user.id %}
+  {% set is_following = current_user.is_authenticated and target_user.followers.filter_by(follower_id=current_user.id).first() %}
+  <div id="c-follow-{{ user_id }}" class="follow-component">
+    {% if is_following %}
+    <button
+      hx-post="/users/{{ user_id }}/follow"
+      hx-target="#c-follow-{{ user_id }}"
+      hx-swap="outerHTML"
+      class="btn btn-sm"
+      style="color:var(--color-primary);border-color:var(--color-primary);"
+    >
+      <i class="bi bi-person-check-fill"></i> Following
+    </button>
+    {% else %}
+    <button
+      hx-post="/users/{{ user_id }}/follow"
+      hx-target="#c-follow-{{ user_id }}"
+      hx-swap="outerHTML"
+      class="btn btn-sm btn-primary"
+    >
+      <i class="bi bi-person-plus"></i> Follow
+    </button>
+    {% endif %}
+  </div>
 {% endmacro %}

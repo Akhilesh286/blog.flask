@@ -1,0 +1,8 @@
+<div class="dash-page">
+  <h2><i class="bi bi-people"></i> Following</h2>
+  <div class="post-container">
+    {% with users=current_user.following %}
+      {% include 'users.html' %}
+    {% endwith %}
+  </div>
+</div>

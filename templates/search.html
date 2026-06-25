@@ -1,49 +1,51 @@
 {% extends "base.html" %}
 
-{% block title %}search{% endblock %}
+{% block title %}Search{% endblock %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/posts.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}">
 {% endblock %}
 
 {% block body %}
-
-{% include 'nav.html' %}
-
-<div class="search-bar">
-    <div class="search-inp">
-        <input type="text" name="q" hx-get="/search-people" hx-trigger="keyup changed delay:500ms" hx-target="#results" id="search" placeholder="search..." >
+<main class="page">
+  <div class="container">
+    <div class="search-page">
+      <div class="search-box">
+        <div class="search-input-wrap">
+          <i class="bi bi-search"></i>
+          <input
+            type="text"
+            name="q"
+            class="input search-input"
+            hx-get="/search-people"
+            hx-trigger="keyup changed delay:300ms"
+            hx-target="#results"
+            placeholder="Search posts and people..."
+            autofocus
+          >
+        </div>
+        <div class="search-tabs">
+          <button type="button" class="btn btn-sm btn-primary switch-btn" data-target="/search-people" data-placeholder="Search people..." data-active="1" id="btn-people">
+            <i class="bi bi-people"></i> People
+          </button>
+          <button type="button" class="btn btn-sm btn-ghost switch-btn" data-target="/search-posts" data-placeholder="Search posts..." id="btn-posts">
+            <i class="bi bi-file-text"></i> Posts
+          </button>
+        </div>
+      </div>
+      <div id="results" class="search-results">
+        <div class="empty-state">
+          <i class="bi bi-search"></i>
+          <p>Type to search...</p>
+        </div>
+      </div>
     </div>
-    <div class="search-by">
-        <button 
-            type="button" 
-            class="switch-btn active" 
-            data-target="/search-people"
-            id="btn-people">
-            People
-        </button>
-
-        <button 
-            type="button" 
-            class="switch-btn" 
-            data-target="/search-posts"
-            id="btn-posts">
-            Post
-        </button>
-    </div>
-</div>
-
-<div class="content">
-    <div id="results" class="container">
-    </div>
-</div>
-
+  </div>
+</main>
 
 {% block scripts %}
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}
-
 {% endblock %}
-

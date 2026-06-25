@@ -25,6 +25,7 @@ from functools import wraps
 import os
 import uuid
 import re
+from dotenv import load_dotenv
 from markdown import markdown
 import humanize
 from datetime import datetime, timezone
@@ -37,12 +38,12 @@ from routes.comments import comments_bp
 # App setup
 # -------------------------------------------------------------------
 
+load_dotenv()
+
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = "hidden-gem"
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql+psycopg2://chatapp:J8nH?32s@localhost:5432/blogdb"
-)
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "fallback-dev-key")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 UPLOAD_FOLDER = os.path.join(app.root_path, "media", "uploads")
@@ -200,7 +201,7 @@ def profile(username):
     if not user:
         return abort(404)
 
-    return render_template("profile.html", profile=user.profile,user=user, is_current_user=False)
+    return render_template("profile.html", profile=user.profile,user=user, is_current_user=False, PostStatus=PostStatus)
 
 
 # -------------------------------------------------------------------
@@ -260,11 +261,34 @@ def logout():
 
 # -------------------------------------------------------------------
 
-@app.route("/profile", methods=["GET", "POST"])
+@app.route("/profile")
 @login_required
 def user_profile():
     profile = Profile.query.filter_by(user_id=current_user.id).first()
     posts = current_user.posts.filter(Post.status == PostStatus.published).all()
+
+    return render_template(
+        "profile.html",
+        profile=profile,
+        posts=posts,
+        user=current_user,
+        is_current_user=True,
+        PostStatus=PostStatus
+    )
+
+# -------------------------------------------------------------------
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
+
+# -------------------------------------------------------------------
+
+@app.route("/dashboard/profile", methods=["GET", "POST"])
+@login_required
+def dashboard_profile():
+    profile = Profile.query.filter_by(user_id=current_user.id).first()
 
     if request.method == "POST":
         pic = request.files.get("pic")
@@ -296,22 +320,12 @@ def user_profile():
                 profile.pic = pic_name
 
         db.session.commit()
-        return redirect(url_for("profile"))
+        return redirect(url_for("dashboard"))
 
     return render_template(
-        "profile.html",
+        "dashboard/profile_edit.html",
         profile=profile,
-        posts=posts,
-        user=current_user,
-        is_current_user=True
     )
-
-# -------------------------------------------------------------------
-
-@app.route("/dashboard")
-@login_required
-def dashboard():
-    return render_template('dashboard.html')
 
 # -------------------------------------------------------------------
 

@@ -1,0 +1,16 @@
+<form
+  class="reply-form"
+  hx-post="{{ url_for('comments.reply_comment', comment_id=comment_id) }}"
+  hx-target="#comment-{{ comment_id }}"
+  hx-swap="afterend"
+  hx-on::after-request="this.remove()"
+>
+  <input type="hidden" name="depth" value="{{ depth|default(1) }}">
+  <textarea
+    name="content"
+    placeholder="Write a reply..."
+    required
+    rows="2"
+  ></textarea>
+  <button class="btn btn-sm btn-primary" type="submit">Reply</button>
+</form>

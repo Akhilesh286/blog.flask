@@ -1,29 +1,24 @@
 {% extends "base.html" %}
 
-{% block title %}Home Page{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/posts.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/action-buttons.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/posts.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/like-section.css') }}">
 {% endblock %}
 
 {% block body %}
-
-{% include 'nav.html' %}
-
-<section style="margin-top: 5rem;">
-    <div style="margin-left: 20%;margin-right: 20%;">
-        <div class="post-container">
-            {% with action_button='action-buttons/delete-publish.html', align_with='title' %}
-                {% include 'posts.html' %}
-            {% endwith %}
-        </div>
+<main class="page">
+  <div class="container">
+    <h1 class="section-title">Feed</h1>
+    <div class="post-container" id="post-container">
+      {% with action_button='action-buttons/delete-publish.html', align_with='title' %}
+        {% include 'posts.html' %}
+      {% endwith %}
     </div>
-</section>
-
-    {% block scripts %}
-    <script src="{{ url_for('static', filename='js/home.js' ) }}"></script>
-    {% endblock %}
-
+  </div>
+</main>
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}
 {% endblock %}

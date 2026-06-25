@@ -1,24 +1,22 @@
-<div 
-    id="c-follow-{{ user_id }}" 
-    class="follow-component"
->
-    {% if is_following %}
-        <button 
-            hx-post="/users/{{ user_id }}/follow"
-            hx-target="#c-follow-{{ user_id }}"
-            hx-swap="outerHTML"
-            class="unfollow-btn"
-        >
-            Following ✔
-        </button>
-    {% else %}
-        <button 
-            hx-post="/users/{{ user_id }}/follow"
-            hx-target="#c-follow-{{ user_id }}"
-            hx-swap="outerHTML"
-            class="follow-btn"
-        >
-            Follow +
-        </button>
-    {% endif %}
+<div id="c-follow-{{ user_id }}" class="follow-component">
+  {% if is_following %}
+  <button
+    hx-post="/users/{{ user_id }}/follow"
+    hx-target="#c-follow-{{ user_id }}"
+    hx-swap="outerHTML"
+    class="btn btn-sm"
+    style="color:var(--color-primary);border-color:var(--color-primary);"
+  >
+    <i class="bi bi-person-check-fill"></i> Following
+  </button>
+  {% else %}
+  <button
+    hx-post="/users/{{ user_id }}/follow"
+    hx-target="#c-follow-{{ user_id }}"
+    hx-swap="outerHTML"
+    class="btn btn-sm btn-primary"
+  >
+    <i class="bi bi-person-plus"></i> Follow
+  </button>
+  {% endif %}
 </div>

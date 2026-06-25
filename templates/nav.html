@@ -1,50 +1,201 @@
-<style>
+<nav class="navbar">
+  <div class="navbar-inner container">
+    <a href="{{ url_for('index') }}" class="nav-logo">
+      <i class="bi bi-journal-text"></i>
+      <span>FlaskBlog</span>
+    </a>
 
-nav {
-    position: relative;
-    display: flex;
-    justify-content: center;
-}
-.foot-nav {
-    background-color: var(--background);
-    position: fixed;
-    bottom: 0;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: var(--space-xs);
-    padding-left: var(--space-xl);
-    padding-right: var(--space-xl);
-    gap: var(--space-lg);
-    border: var(--border-primary) solid 2px;
-    border-radius: var(--radius-xl);
-}
-nav img {
-    width: 2.5rem;
-}
+    <div class="nav-links">
+      <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">
+        <i class="bi bi-house"></i>
+        <span>Home</span>
+      </a>
+      <a href="{{ url_for('search') }}" class="nav-link {% if request.endpoint == 'search' %}active{% endif %}">
+        <i class="bi bi-search"></i>
+        <span>Search</span>
+      </a>
+      <a href="{{ url_for('create_post') }}" class="nav-link {% if request.endpoint == 'create_post' %}active{% endif %}">
+        <i class="bi bi-plus-lg"></i>
+        <span>Write</span>
+      </a>
+      <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint and request.endpoint.startswith('dashboard') %}active{% endif %}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </div>
 
-.profile-pic {
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: var(--radius-full);
-}
-
-
-</style>
-
-
-<footer>
-    <nav>
-        <div class="foot-nav">
-            <a href="{{ url_for('index' ) }}"><img src="{{ url_for('static',filename='icons/home.svg')}}" alt="" srcset=""></a>
-            <a href="{{ url_for('search' ) }}"><img src="{{ url_for('static',filename='icons/search.svg')}}" alt="" srcset=""></a>
-            <a href="{{ url_for('create_post' ) }}"><img src="{{ url_for('static',filename='icons/add_circle.svg')}}" alt="" srcset=""></a>
-            <a href="{{ url_for('user_profile' ) }}" 
-                hx-get="/components/profile-pic"
-                hx-trigger="load"
-                hx-target="this"
-            >
-            </a>
+    <div class="nav-profile">
+      {% if current_user.is_authenticated %}
+      <div class="nav-profile-dropdown">
+        <a href="{{ url_for('user_profile') }}" class="nav-link">
+          <img
+            class="avatar avatar-sm"
+            src="{{ url_for('profile_pic') }}"
+            alt="profile"
+          >
+        </a>
+        <div class="dropdown-menu">
+          <a href="{{ url_for('user_profile') }}"><i class="bi bi-person"></i> Profile</a>
+          <a href="{{ url_for('dashboard') }}"><i class="bi bi-grid"></i> Dashboard</a>
+          <hr>
+          <a href="{{ url_for('logout') }}" class="text-error"><i class="bi bi-box-arrow-right"></i> Logout</a>
         </div>
-    </nav>
-</footer>
+      </div>
+      {% else %}
+      <a href="{{ url_for('sign_in') }}" class="btn btn-primary btn-sm">Sign In</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+<nav class="bottom-nav">
+  <a href="{{ url_for('index') }}" class="bottom-nav-link {% if request.endpoint == 'index' %}active{% endif %}">
+    <i class="bi bi-house"></i>
+    <span>Home</span>
+  </a>
+  <a href="{{ url_for('search') }}" class="bottom-nav-link {% if request.endpoint == 'search' %}active{% endif %}">
+    <i class="bi bi-search"></i>
+    <span>Search</span>
+  </a>
+  <a href="{{ url_for('create_post') }}" class="bottom-nav-link {% if request.endpoint == 'create_post' %}active{% endif %}">
+    <i class="bi bi-plus-lg"></i>
+    <span>Write</span>
+  </a>
+  <a href="{{ url_for('dashboard') }}" class="bottom-nav-link {% if request.endpoint and request.endpoint.startswith('dashboard') %}active{% endif %}">
+    <i class="bi bi-grid"></i>
+    <span>Dashboard</span>
+  </a>
+  <a href="{{ url_for('user_profile') }}" class="bottom-nav-link {% if request.endpoint == 'user_profile' %}active{% endif %}">
+    <i class="bi bi-person"></i>
+    <span>Profile</span>
+  </a>
+</nav>
+
+<style>
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(37, 37, 37, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-primary);
+  height: 3.5rem;
+  display: none;
+}
+@media (min-width: 768px) {
+  .navbar { display: block; }
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: var(--gap-xl);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  color: var(--color-primary);
+  font-family: var(--font-family-secondary);
+  font-size: var(--font-size-subtitle);
+  font-weight: var(--font-weight-title);
+}
+.nav-logo i { font-size: 1.4em; }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  flex: 1;
+  justify-content: center;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-lg);
+  color: var(--text-body);
+  font-size: var(--font-size-caption);
+  transition: all 0.2s;
+}
+.nav-link:hover {
+  color: var(--text-title);
+  background: var(--foreground);
+}
+.nav-link.active {
+  color: var(--color-primary);
+  background: rgba(68, 204, 119, 0.1);
+}
+.nav-link i { font-size: 1.2rem; }
+
+.nav-profile { margin-left: auto; }
+.nav-profile-dropdown { position: relative; }
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: var(--background-extra);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xs);
+  min-width: 180px;
+  z-index: 200;
+}
+.dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--space-sm) var(--space-md);
+  color: var(--text-body);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-caption);
+}
+.dropdown-menu a:hover { background: var(--foreground); color: var(--text-title); }
+.dropdown-menu hr { border: none; border-top: 1px solid var(--foreground); margin: var(--space-xs) 0; }
+.nav-profile-dropdown:hover .dropdown-menu,
+.nav-profile-dropdown:focus-within .dropdown-menu { display: block; }
+
+/* ── Bottom nav (mobile) ───────────────────────────── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--background);
+  border-top: 1px solid var(--border-primary);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: var(--space-xs) 0;
+  padding-bottom: max(var(--space-xs), env(safe-area-inset-bottom));
+}
+@media (min-width: 768px) {
+  .bottom-nav { display: none; }
+}
+.bottom-nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--text-disabled);
+  font-size: var(--font-size-disabled);
+  padding: var(--space-xxs) var(--space-xs);
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+  min-width: 3.5rem;
+}
+.bottom-nav-link i {
+  font-size: 1.3rem;
+}
+.bottom-nav-link.active {
+  color: var(--color-primary);
+}
+.bottom-nav-link:hover {
+  color: var(--text-body);
+}
+</style>

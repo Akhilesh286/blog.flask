@@ -1,41 +1,52 @@
-<div class="sidebar">
-    {% include 'profile-topbar.html' %}
-    <div class="profile-pic">      
-        <img
-            id="profilePreview"
-            {% if profile and profile.pic %}
-            src="{{ url_for('media', filename='uploads/' ~ profile.pic) }}"
-            {% else %}
-            src="{{ url_for('static', filename='images/prf.jpeg') }}"
-            {% endif %}
-            alt="Profile Picture"
-            class="profile-img"
-        />
-    </div>
-    <p class="user-username">{{user.username}}</p>
-    <div class="profile-details">
-        {% if profile %}
-        <p class="user-name">{{profile.first_name}} {{profile.last_name}}</p>
-        {% if profile.website %}
-        <a class="user-web" href="{{ profile.website if profile.website.startswith('http') else 'https://' + profile.website }}">
-            {{ profile.website }}
-        </a>
-        {% endif %}
-        <p class="user-bio">{{profile.bio}}</p>
-        {% else %}
-        <p class="user-name">No profile</p>
-        {% endif %}
-    </div>
-    <div class="follow-stats">
-        <div class="followers">
-            <h1>{{ user.followers.count() }}</h1>
-            <p>Followers</p>
-        </div>
+<div class="profile-card">
+  <div class="profile-avatar">
+    <img
+      class="avatar avatar-xl"
+      {% if profile and profile.pic %}
+      src="{{ url_for('media', filename='uploads/' ~ profile.pic) }}"
+      {% else %}
+      src="{{ url_for('static', filename='images/prf.jpeg') }}"
+      {% endif %}
+      alt="Profile"
+    >
+  </div>
+  <h2 class="profile-username">{{ user.username }}</h2>
+  {% if profile %}
+  <p class="profile-name">{{ profile.first_name }} {{ profile.last_name }}</p>
+  {% if profile.bio %}
+  <p class="profile-bio">{{ profile.bio }}</p>
+  {% endif %}
+  {% if profile.website %}
+  <a class="profile-website" href="{{ profile.website if profile.website.startswith('http') else 'https://' + profile.website }}" target="_blank">
+    <i class="bi bi-link-45deg"></i> {{ profile.website }}
+  </a>
+  {% endif %}
+  {% else %}
+  <p class="profile-bio">No profile set up yet.</p>
+  {% endif %}
 
-        <div class="following">
-            <h1>{{ user.following.count() }}</h1>
-            <p>Following</p>
-        </div>
-    </div>
+  {% if is_current_user %}
+  <a href="{{ url_for('user_profile') }}" class="btn btn-ghost btn-sm" style="width:100%;margin-top:var(--space-md)">
+    <i class="bi bi-pencil"></i> Edit Profile
+  </a>
+  {% else %}
+  <div id="follow-section-profile" style="margin-top:var(--space-md);width:100%">
+    {% include "follow-section.html" %}
+  </div>
+  {% endif %}
 
+  <div class="profile-stats">
+    <div class="stat">
+      <span class="stat-value">{{ user.posts.filter_by(status=PostStatus.published).count() }}</span>
+      <span class="stat-label">Posts</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{{ user.followers.count() }}</span>
+      <span class="stat-label">Followers</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{{ user.following.count() }}</span>
+      <span class="stat-label">Following</span>
+    </div>
+  </div>
 </div>

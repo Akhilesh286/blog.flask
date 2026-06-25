@@ -1,56 +1,45 @@
-<div class="dashboard-sidebar">
-    <button id="backBtn">Back</button>
-    <div class="dashboard-child" hx-get="/dashboard/bookmarks" hx-target="#main-content" hx-swap="innerHTML">
-        Bookmark Posts
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/drafts" hx-target="#main-content" hx-swap="innerHTML">
-        Draft Posts
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/archive" hx-target="#main-content" hx-swap="innerHTML">
-        Archive Posts
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/likes" hx-target="#main-content" hx-swap="innerHTML">
-        Likes
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/comments" hx-target="#main-content" hx-swap="innerHTML">
-        Comments
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/connections" hx-target="#main-content" hx-swap="innerHTML">
-        Connections
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/security" hx-target="#main-content" hx-swap="innerHTML">
-        Password and Security
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/phone" hx-target="#main-content" hx-swap="innerHTML">
-        Phone Verification
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/email" hx-target="#main-content" hx-swap="innerHTML">
-        Email Verification
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/2fa" hx-target="#main-content" hx-swap="innerHTML">
-        2 factor authentication
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/about" hx-target="#main-content" hx-swap="innerHTML">
-        About
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/help" hx-target="#main-content" hx-swap="innerHTML">
-        Help
-    </div>
-
-    <div class="dashboard-child" hx-get="/dashboard/logout" hx-target="#main-content" hx-swap="innerHTML">
-        Logout
-    </div>
-
-
-</div>
+<nav class="dash-nav">
+  <a class="dash-nav-item" hx-get="/dashboard/bookmarks" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-bookmark"></i> <span>Bookmarks</span>
+  </a>
+  <a class="dash-nav-item" hx-get="/dashboard/drafts" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-pencil"></i> <span>Drafts</span>
+  </a>
+  <a class="dash-nav-item" hx-get="/dashboard/archive" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-archive"></i> <span>Archive</span>
+  </a>
+  <a class="dash-nav-item" hx-get="/dashboard/likes" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-heart"></i> <span>Liked Posts</span>
+  </a>
+  <a class="dash-nav-item" hx-get="/dashboard/comments" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-chat-dots"></i> <span>Comments</span>
+  </a>
+  <a class="dash-nav-item" hx-get="/dashboard/connections" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-people"></i> <span>Connections</span>
+  </a>
+  <a class="dash-nav-item" hx-get="/dashboard/profile" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-person"></i> <span>Edit Profile</span>
+  </a>
+  <a class="dash-nav-item" hx-get="/dashboard/security" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-shield-lock"></i> <span>Security</span>
+  </a>
+  <a class="dash-nav-item" hx-get="/dashboard/email" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-envelope"></i> <span>Email</span>
+  </a>
+  <a class="dash-nav-item" hx-get="/dashboard/phone" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-telephone"></i> <span>Phone</span>
+  </a>
+  <a class="dash-nav-item" hx-get="/dashboard/2fa" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-key"></i> <span>2FA</span>
+  </a>
+  <hr class="dash-divider">
+  <a class="dash-nav-item" hx-get="/dashboard/about" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-info-circle"></i> <span>About</span>
+  </a>
+  <a class="dash-nav-item" hx-get="/dashboard/help" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-question-circle"></i> <span>Help</span>
+  </a>
+  <a class="dash-nav-item dash-nav-logout" hx-get="/dashboard/logout" hx-target="#main-content" hx-swap="innerHTML">
+    <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
+  </a>
+</nav>

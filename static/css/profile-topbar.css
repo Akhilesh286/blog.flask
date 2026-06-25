@@ -1,6 +1,0 @@
-.profile-topbar {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: var(--space-base);
-}

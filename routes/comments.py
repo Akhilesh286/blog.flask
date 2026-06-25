@@ -49,7 +49,8 @@ def add_comment(post_id):
     db.session.commit()
     return render_template(
         "comments/comment-item.html",
-        comment=comment
+        comment=comment,
+        depth=0
     )
 
 
@@ -58,7 +59,8 @@ def add_comment(post_id):
 @comments_bp.get("/comments/<int:comment_id>/reply-form")
 @login_required
 def load_reply_form(comment_id):
-    return render_template("reply-form.html", comment_id=comment_id)
+    depth = request.args.get("depth", 1, type=int)
+    return render_template("reply-form.html", comment_id=comment_id, depth=depth)
 
 # -------------------------------------------------------------------
 
@@ -80,7 +82,8 @@ def reply_comment(comment_id):
     db.session.add(reply)
     db.session.commit()
 
-    return render_template("comments/reply-item.html", reply=reply)
+    reply_depth = request.form.get("depth", 1, type=int)
+    return render_template("comments/reply-item.html", reply=reply, depth=reply_depth)
 
 
 # -------------------------------------------------------------------
@@ -98,11 +101,14 @@ def load_replies(comment_id):
         .all()
     )
 
+    depth = request.args.get("depth", 1, type=int)
+
     return render_template(
         "comments/reply-list.html",
         replies=replies,
         comment_id=comment_id,
-        next_offset=offset + len(replies)
+        next_offset=offset + len(replies),
+        depth=depth
     )
 
 @comments_bp.get("/comments/<int:comment_id>/reply-preview")

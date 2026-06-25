@@ -1,0 +1,18 @@
+<div class="dash-page">
+  <h2><i class="bi bi-telephone"></i> Phone Verification</h2>
+
+  <div class="post-card" style="margin-bottom:var(--space-lg)">
+    <h3 style="color:var(--text-title);margin-bottom:var(--space-md)">Add Phone Number</h3>
+    <div class="field">
+      <label for="phone">Phone Number</label>
+      <input type="tel" name="phone" id="phone" class="input" placeholder="+1 (555) 123-4567" value="{{ current_user.phone or '' }}">
+    </div>
+    <button class="btn btn-primary btn-sm" style="margin-top:var(--space-sm)">Send Code</button>
+
+    <div class="field" style="margin-top:var(--space-lg)">
+      <label for="verify_code">Verification Code</label>
+      <input type="text" name="verify_code" id="verify_code" class="input" placeholder="Enter 6-digit code">
+    </div>
+    <button class="btn btn-primary btn-sm" style="margin-top:var(--space-sm)">Verify</button>
+  </div>
+</div>

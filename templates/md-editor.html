@@ -1,10 +1,183 @@
-
-<div class="wrapper" id="wrapper">
-    <div class="editor-panel">
-        <textarea name="content" id="editor">{{ post.content | default('') }}</textarea>
+<div class="md-editor" id="md-editor">
+  <div class="md-pane" id="md-editor-left">
+    <div class="md-toolbar">
+      <button type="button" class="btn-icon md-btn" data-md="# " title="Heading 1"><i class="bi bi-type-h1"></i></button>
+      <button type="button" class="btn-icon md-btn" data-md="## " title="Heading 2"><i class="bi bi-type-h2"></i></button>
+      <button type="button" class="btn-icon md-btn" data-md="### " title="Heading 3"><i class="bi bi-type-h3"></i></button>
+      <button type="button" class="btn-icon md-btn" data-md="**" data-md-end="**" title="Bold"><i class="bi bi-type-bold"></i></button>
+      <button type="button" class="btn-icon md-btn" data-md="*" data-md-end="*" title="Italic"><i class="bi bi-type-italic"></i></button>
+      <button type="button" class="btn-icon md-btn" data-md="```\n" data-md-end="\n```" title="Code block"><i class="bi bi-code"></i></button>
+      <button type="button" class="btn-icon md-btn" data-md="- " title="List"><i class="bi bi-list-ul"></i></button>
+      <button type="button" class="btn-icon md-btn" data-md="> " title="Blockquote"><i class="bi bi-blockquote-left"></i></button>
+      <button type="button" class="btn-icon md-btn" data-md="---\n" title="Horizontal rule"><i class="bi bi-dash-lg"></i></button>
     </div>
-
-    <div class="splitter" id="splitter"></div>
-
-    <div class="preview-panel markdown-body" id="preview"></div>
+    <textarea name="content" id="editor-textarea" class="input md-textarea" placeholder="Write your post in Markdown...">{{ post.content if post else '' }}</textarea>
+  </div>
+  <div class="md-divider" id="md-divider"></div>
+  <div class="md-pane md-preview" id="md-preview">
+    <div class="md-preview-label">Preview</div>
+    <div class="md-preview-content content-body" id="preview-content"></div>
+  </div>
 </div>
+
+<style>
+.md-editor {
+  display: flex;
+  height: 100%;
+  gap: 1px;
+  background: var(--foreground);
+  border: 1px solid var(--foreground);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.md-pane {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  min-width: 0;
+}
+.md-pane.md-pane-fixed {
+  flex: none;
+}
+.md-toolbar {
+  display: flex;
+  gap: 2px;
+  padding: var(--space-xs);
+  background: var(--background-extra);
+  border-bottom: 1px solid var(--foreground);
+  flex-wrap: wrap;
+}
+.md-btn {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+}
+.md-btn:hover {
+  background: var(--foreground);
+  color: var(--text-title);
+}
+.md-textarea {
+  flex: 1;
+  border: none;
+  border-radius: 0;
+  resize: none;
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: var(--font-size-caption);
+  line-height: 1.6;
+  padding: var(--space-md);
+}
+.md-textarea:focus {
+  box-shadow: none;
+}
+.md-divider {
+  width: 4px;
+  background: var(--foreground);
+  cursor: col-resize;
+  flex-shrink: 0;
+}
+.md-preview {
+  overflow-y: auto;
+}
+.md-preview-label {
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-caption);
+  color: var(--text-disabled);
+  border-bottom: 1px solid var(--foreground);
+  background: var(--background-extra);
+}
+.md-preview-content {
+  padding: var(--space-md);
+  flex: 1;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .md-editor {
+    flex-direction: column;
+    height: 100%;
+  }
+  .md-preview {
+    display: none;
+  }
+  .md-preview.show {
+    display: flex;
+  }
+}
+</style>
+
+<style>
+.md-editor.dragging {
+  user-select: none;
+  cursor: col-resize;
+}
+.md-editor.dragging .md-pane {
+  pointer-events: none;
+}
+</style>
+
+<script>
+// ── Resizable splitter ─────────────────────────────
+(function() {
+  const editor = document.getElementById("md-editor");
+  const left = document.getElementById("md-editor-left");
+  const divider = document.getElementById("md-divider");
+
+  if (!editor || !left || !divider) return;
+
+  let dragging = false;
+
+  divider.addEventListener("mousedown", (e) => {
+    dragging = true;
+    left.classList.add("md-pane-fixed");
+    editor.classList.add("dragging");
+    e.preventDefault();
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!dragging) return;
+    const rect = editor.getBoundingClientRect();
+    let leftWidth = e.clientX - rect.left;
+    if (leftWidth < 100) leftWidth = 100;
+    if (leftWidth > rect.width - 100) leftWidth = rect.width - 100;
+    left.style.width = leftWidth + "px";
+  });
+
+  document.addEventListener("mouseup", () => {
+    dragging = false;
+    editor.classList.remove("dragging");
+  });
+})();
+
+document.addEventListener("DOMContentLoaded", () => {
+  const textarea = document.getElementById("editor-textarea");
+  const preview = document.getElementById("preview-content");
+
+  function updatePreview() {
+    if (preview && textarea) {
+      preview.innerHTML = marked.parse(textarea.value || "");
+    }
+  }
+
+  if (textarea && preview) {
+    textarea.addEventListener("input", updatePreview);
+    updatePreview();
+  }
+
+  // Toolbar buttons
+  document.querySelectorAll(".md-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const md = btn.dataset.md || "";
+      const mdEnd = btn.dataset.mdEnd || "";
+      if (!textarea) return;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selected = textarea.value.substring(start, end);
+      const replacement = md + selected + mdEnd;
+      textarea.setRangeText(replacement, start, end, "end");
+      updatePreview();
+      textarea.focus();
+    });
+  });
+});
+</script>

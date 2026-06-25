@@ -1,31 +1,47 @@
-@import url(style.css);
-
-.author-action {
-    display: flex;
-    align-items: center;
-    margin: var(--space-md) 0;
-    justify-content: space-between;
-    width: 100%;
+.user-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--background-extra);
+  border: 1px solid var(--foreground);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  gap: var(--gap-md);
+  transition: border-color 0.2s;
+}
+.user-row:hover {
+  border-color: var(--border-primary);
 }
 
-.profile-pic {
-    width: 48px;
-    border-radius: var(--radius-full);
-    aspect-ratio: 1;
-    object-fit: cover;
+.user-row-main {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
 }
 
-.author-data {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-md);
-    border: var(--border-primary) 1px solid;
-    width: 20rem;
-    padding: var(--space-xs);
+.user-row-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
-.author-data p {
-    margin: 0;
+
+.user-row-name {
+  color: var(--text-title);
+  font-weight: var(--font-weight-subtitle);
+  font-size: var(--font-size-body);
 }
-.action-btns {
-    margin-left: auto;
+
+.user-row-bio {
+  color: var(--text-disabled);
+  font-size: var(--font-size-caption);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-row-action {
+  flex-shrink: 0;
 }

@@ -1,22 +1,48 @@
-<div class="dropdown">
-    <button class="dot-button" data-bs-toggle="dropdown">
-        <i class="bi bi-three-dots-vertical"></i>
-    </button>
-    <ul class="dropdown-menu">
-        <li><a class="dropdown-item publish" href="/posts/{{post.id}}/publish">Publish</a></li>
-        <li>
-            <a 
-                class="dropdown-item delete"
-                hx-get="/posts/confirm-delete/{{ post.id }}"
-                hx-target="#deleteModalContent"
-                hx-trigger="click"
-                data-bs-toggle="modal"
-                data-bs-target="#deleteModal"
-                href="#"
-            >
-                Delete
-            </a>
-        </li>
-
-    </ul>
+<div class="post-actions-dropdown">
+  <button class="btn-icon" onclick="this.nextElementSibling.classList.toggle('show')" aria-label="Actions">
+    <i class="bi bi-three-dots-vertical"></i>
+  </button>
+  <div class="dropdown-content">
+    {% if post.status.name == 'draft' %}
+    <a href="{{ url_for('publish_post', post_id=post.id) }}"><i class="bi bi-check-lg"></i> Publish</a>
+    {% endif %}
+    <a href="{{ url_for('update_post', post_id=post.id) }}"><i class="bi bi-pencil"></i> Update</a>
+    <a
+      href="#"
+      hx-get="{{ url_for('confirm_delete', post_id=post.id) }}"
+      hx-target="#deleteModalContent"
+      hx-trigger="click"
+      data-bs-toggle="modal"
+      data-bs-target="#deleteModal"
+    ><i class="bi bi-trash"></i> Delete</a>
+  </div>
 </div>
+
+<style>
+.post-actions-dropdown { position: relative; display: inline-block; }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: var(--background-extra);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  min-width: 140px;
+  z-index: 50;
+  padding: var(--space-xs);
+}
+.dropdown-content.show { display: block; }
+.dropdown-content a {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--space-sm) var(--space-md);
+  color: var(--text-body);
+  font-size: var(--font-size-caption);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+}
+.dropdown-content a:hover { background: var(--foreground); color: var(--text-title); }
+.dropdown-content a:last-child { color: var(--color-error); }
+</style>

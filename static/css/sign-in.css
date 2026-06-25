@@ -1,97 +1,64 @@
-@import url(style.css);
-
-body {
-    margin: 0;
-    background-color: var(--bg);
-    color: var(--txt-light);
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-md);
 }
 
-.main {
-    display: flex;
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--background-extra);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
 }
 
-.img {
-    width: 30%;
-    height: 100vh;
-    position: relative;
-    align-items: center;
+.auth-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
 }
-.img img {
-    height: 100%;
+.auth-header h1 {
+  font-family: var(--font-family-secondary);
+  font-size: var(--font-size-title);
+  color: var(--text-title);
+  margin-bottom: var(--space-xs);
 }
-.img h1 {
-    font-size: 3rem;
-    position: absolute;
-    top: 50%;
-    left: 30%;
-    transform: rotate(-90deg);
-    font-family: "Lexend Deca", sans-serif;
+.auth-header p {
+  color: var(--text-body);
+  font-size: var(--font-size-body);
 }
 
-.cnt {
-    width: 70%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-left: 10%;
-    margin-right: 10%;
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
 }
 
-.cnt h1 {
-    font-family: "DM Serif Display", serif;
-    color: var(--txt-light);
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
 }
-.cnt h4 {
-    font-family: "Lexend Deca", sans-serif;
-    color: var(--txt-primary);
+.field label {
+  color: var(--text-subtitle);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-subtitle);
 }
-.cnt input {
-    padding: 1rem;
-    width: 70%;
-    margin-top: .5rem;
-    background-color: var(--bg);
-    border: var(--border-primary) 3px solid;
-    color: var(--txt-light);
-    border-radius: 5px;
-}
-.cnt input:focus {
-    border-color: var(--border-hover); /* Change border color */
-    box-shadow: 0 0 8px var(--border-hover); /* Add shadow effect */
-    /* background-color: #f0f8ff; Optional: change background color */
-    outline: none; /* Remove default outline */
-}
-.cnt button {
-    color: var(--txt-dark);
-    background-color: var(--btn-primary);
-    border: none;
-    width: 25%;
-    height: 3rem;
-    font-size: 1.5rem;
-    font-family: "Lexend Deca", sans-serif;
-}
-.cnt button:hover {
-    background-color: var(--bg);
-    border: var(--border-hover) 2px solid;
-    color: var(--txt-light);
-}
-.cnt button:focus{
-    box-shadow: 0 0 8px var(--border-hover); /* Add shadow effect */
-    outline: none;
-    border: none;
-}
-.cnt button:active{
-    border: none;
-    outline: none;
-    box-shadow: 0 0 8px var(--border-hover); /* Add shadow effect */
 
+.auth-submit {
+  width: 100%;
+  margin-top: var(--space-sm);
+}
 
+.auth-alt {
+  text-align: center;
+  margin-top: var(--space-lg);
+  color: var(--text-body);
+  font-size: var(--font-size-caption);
 }
-.cnt p {
-    font-family: "Lexend Deca", sans-serif;
-}
-.cnt p span {
-    color: var(--txt-secondary);
-}
-.cnt a {
-    color: var(--txt-secondary);
+.auth-alt a {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-subtitle);
 }

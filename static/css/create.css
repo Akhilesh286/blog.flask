@@ -1,37 +1,98 @@
-@import url(style.css);
-
-/* topbar layout */
-.main-body {
-    display: flex;
-    flex-direction: column;
-}
-/* topbar style */
-.top-nav-bar {
-    background-color: var(--background-extra);
-    display: flex;
-    border-bottom: var(--text-disabled) var(--border-lg) solid;
-}
-.topbar-btn {
-    align-self: flex-start;
-    justify-self: flex-end;
+.editor-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.topbar-hide {
-    display: none;
-}
-.top-nav-mini {
-    flex-grow: 1;
-    padding: var(--space-md);
-}
-.top-nav-mini ul {
-    display: flex;
-    gap: var(--gap-md);
-    margin: 0;
-}
-.top-nav-mini li {
-    list-style-type: none;
+.editor-page form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.top-nav-max {
-    flex-grow: 1;
+.editor-topbar {
+  background: var(--background-extra);
+  border-bottom: 1px solid var(--border-primary);
+  padding: var(--space-sm) 0;
+  flex-shrink: 0;
+}
+
+.editor-topbar-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.editor-title-input {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-caption);
+  background: var(--background);
+  border: 1px solid var(--foreground);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xxs) var(--space-sm);
+  width: auto;
+  min-width: 120px;
+  flex: 2;
+  height: 32px;
+}
+.editor-title-input:focus {
+  border-color: var(--border-hover);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(68, 204, 119, 0.15);
+}
+
+textarea.editor-desc-input {
+  background: var(--background);
+  border: 1px solid var(--foreground);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xxs) var(--space-sm);
+  min-height: 32px;
+  font-size: var(--font-size-caption);
+  resize: none;
+  width: auto;
+  flex: 3;
+  white-space: nowrap;
+  overflow: hidden;
+  height: 32px;
+}
+.editor-desc-input:focus {
+  border-color: var(--border-hover);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(68, 204, 119, 0.15);
+}
+
+.editor-status-select {
+  width: auto;
+  padding: var(--space-xxs) var(--space-sm);
+  font-size: var(--font-size-caption);
+  background: var(--background);
+  cursor: pointer;
+  height: 32px;
+}
+
+.editor-topbar-inner .btn {
+  height: 32px;
+}
+
+.editor-body {
+  flex: 1;
+  padding: var(--space-md);
+  min-height: 0;
+}
+
+@media (max-width: 768px) {
+  .editor-page {
+    padding-bottom: 3.5rem;
+  }
+  .editor-topbar-inner {
+    flex-wrap: wrap;
+  }
+  .editor-desc-input {
+    flex: 1 1 100%;
+    order: 1;
+  }
+  .editor-title-input {
+    flex: 1;
+    min-width: 80px;
+  }
 }

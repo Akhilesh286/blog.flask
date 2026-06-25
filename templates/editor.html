@@ -1,49 +1,49 @@
 {% extends "base.html" %}
 
-{% block title %}Home Page{% endblock %}
+{% block title %}{{ 'Edit Post' if post else 'New Post' }}{% endblock %}
+
+{% block navbar %}{% endblock %}
 
 {% block head %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/material-darker.css">
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/markdown/markdown.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/xml/xml.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/create-topbar.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/md-editor.css') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/material-darker.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/markdown/markdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
 {% endblock %}
 
 {% block body %}
 {% set post = post if post is defined else None %}
+<main class="editor-page">
+  <form action="{{ url_for('update_post', post_id=post.id) if post else url_for('create_post') }}" method="POST">
+    <div class="editor-topbar">
+      <div class="container editor-topbar-inner">
+        <button type="button" id="backBtn" class="btn btn-ghost btn-sm"><i class="bi bi-arrow-left"></i></button>
+        <input type="text" name="title" class="input editor-title-input" placeholder="New Post" value="{{ post.title if post else '' }}" required>
+        <textarea name="description" class="input editor-desc-input" rows="1" placeholder="Short description (optional)">{{ post.description if post else '' }}</textarea>
+        <select name="status" class="input editor-status-select">
+          <option value="draft" {% if post and post.status.name == 'draft' %}selected{% endif %}>Draft</option>
+          <option value="published" {% if post and post.status.name == 'published' %}selected{% endif %}>Published</option>
+          <option value="archived" {% if post and post.status.name == 'archived' %}selected{% endif %}>Archived</option>
+        </select>
+        <button type="submit" class="btn btn-primary btn-sm">
+          <i class="bi bi-check-lg"></i> {{ 'Update' if post else 'Publish' }}
+        </button>
+        <button type="button" class="btn btn-ghost btn-sm" title="Settings">
+          <i class="bi bi-gear"></i>
+        </button>
+      </div>
+    </div>
 
-<section class="main-body">
-    <form action="{{ url_for('update_post', post_id=post.id) if post else url_for('create_post') }}" method="POST">
-        <div class="top-nav-bar">
-            <nav id="topbar-mini" class="top-nav-mini">
-                {% include 'editor-menu.html' %}
-            </nav>
-            <div id="topbar-max" class="topbar-hide top-nav-max">
-                {% include 'editor-topbar.html' %}
-            </div>
-            <button type="button" id="toggleTopbar" class="topbar-btn" >show</button>
-            <button type="button" id="backBtn" class="topbar-btn" >Back</button>
-        </div>
-        <!-- Main Content -->
-        <main>
-            {% include 'md-editor.html' %}
-        </main>
-    </form>
-</section>
+    <div class="editor-body">
+      {% include 'md-editor.html' %}
+    </div>
+  </form>
+</main>
 
-
-
-
-
-    {% block scripts %}
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/create.js') }}"></script>
-
-    {% endblock %}
-
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/create.js') }}"></script>
+{% endblock %}
 {% endblock %}

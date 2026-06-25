@@ -1,4 +1,3 @@
-<div class="reply">
-    <strong>{{ reply.user.username }}</strong>
-    <p>{{ reply.content }}</p>
-</div>
+{% with comment=reply, depth=depth|default(1), is_last=True %}
+  {% include 'comments/comment-item.html' %}
+{% endwith %}

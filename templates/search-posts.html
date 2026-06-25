@@ -1,10 +1,20 @@
 {% for post in posts %}
-    <div class="cnt">
-    <a href="/post/{{post.slug}}" style="all: unset;">
-        <div class="cnt-tit">
-            <h1>{{post.title}}</h1>
-            <h5>{{post.description}}</h5>
-        </div>
-    </a>
-    </div>    
+<article class="post-card">
+  <a href="/post/{{ post.slug }}" class="post-title">
+    <h2>{{ post.title }}</h2>
+    {% if post.description %}
+    <p class="post-desc">{{ post.description }}</p>
+    {% endif %}
+  </a>
+  <div class="post-meta" style="border:none;margin:var(--space-sm) 0 0 0;padding:0">
+    <span class="post-date">
+      <i class="bi bi-clock"></i> {{ post.created_at | timeago }}
+    </span>
+  </div>
+</article>
+{% else %}
+<div class="empty-state">
+  <i class="bi bi-search"></i>
+  <p>No posts found</p>
+</div>
 {% endfor %}

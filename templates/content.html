@@ -1,73 +1,95 @@
 {% extends "base.html" %}
 
-{% block title %}Home Page{% endblock %}
+{% block title %}{{ post.title }}{% endblock %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/like-section.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bookmark-section.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/comment-sidebar.css') }}">
-
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/like-section.css') }}">
 {% endblock %}
 
 {% block body %}
-    {% include 'components/comment-sidebar.html' %}
-    <section class="main-body">
-        <div class="container">
-            <div class="cnt">
-                <div class="cnt-tit">
-                    <h2>{{post.title}}</h2>
-                    <h4>{{post.description}}</h5>
-                    <h6>{{post.created_at.strftime("%Y-%m-%d")}}</h6>
-                </div>
-                <div class="author-action">
-                    <div class="action-row">
-                        <div class="comment-btn action-btns">
-                            <button
-                                hx-get="{{ url_for('comments.load_post_comments', post_id=post.id) }}"
-                                hx-target="#comment-panel"
-                                hx-swap="innerHTML"
-                                id="toggle-comment"
-                                class="btn btn-primary toggle-comment"
-                            >
-                                Comment
-                            </button>
-
-                        </div>
-                        <div id="bookmark-section">
-                            {% include "bookmark-section.html" %}
-                        </div>
-                        <div id="like-section">
-                            {% include "like-section.html" %}
-                        </div>
-                    </div>
-                    {% if post.author.id == current_user.id %}
-                        < You >
-                    {% else %}
-                    <div class="author-data">
-                        <img class="profile-pic"
-                            {% if post.author.profile.pic %}
-                            src="{{ url_for('media', filename='uploads/' ~ post.author.profile.pic) }}" 
-                            {% else %}
-                            src="{{ url_for('static',filename='images/prf.jpeg')}}" 
-                            {% endif %}
-                            alt=""
-                        >
-                        <p>{{post.author.username}}</p >
-                        <div class="follow-btn action-btns" id="follow-section">
-                            {% set target_user = post.author %}
-                            {% include "follow-section.html" %}
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="content">{{content|safe}}</div>
-            </div>
+<main class="page">
+  <article class="container content-layout">
+    <div class="content-main">
+      <header class="content-header">
+        <h1 class="content-title">{{ post.title }}</h1>
+        {% if post.description %}
+        <p class="content-desc">{{ post.description }}</p>
+        {% endif %}
+        <div class="content-meta">
+          <a href="{{ url_for('profile', username=post.author.username) }}" class="content-author">
+            <img
+              class="avatar avatar-sm"
+              {% if post.author.profile and post.author.profile.pic %}
+              src="{{ url_for('media', filename='uploads/' ~ post.author.profile.pic) }}"
+              {% else %}
+              src="{{ url_for('static', filename='images/prf.jpeg') }}"
+              {% endif %}
+              alt=""
+            >
+            <span>{{ post.author.username }}</span>
+          </a>
+          <span class="content-date">
+            <i class="bi bi-calendar3"></i>
+            {{ post.created_at.strftime("%b %d, %Y") }}
+          </span>
         </div>
-    </section>
+      </header>
 
-    {% block scripts %}
-        <script src="{{ url_for('static', filename='js/content.js') }}"></script>
-    {% endblock %}
+      <div class="content-body">
+        {{ content | safe }}
+      </div>
 
+      <div class="content-actions">
+        <div id="like-section">
+          {% include "like-section.html" %}
+        </div>
+        <div id="bookmark-section">
+          {% include "bookmark-section.html" %}
+        </div>
+        <button
+          class="btn btn-ghost"
+          hx-get="{{ url_for('comments.load_post_comments', post_id=post.id) }}"
+          hx-target="#comment-section"
+          hx-swap="innerHTML"
+          id="toggle-comment"
+        >
+          <i class="bi bi-chat"></i> Comments
+        </button>
+        {% if post.author.id != current_user.id %}
+        {% set user_id = post.author.id %}
+        {% set is_following = current_user.is_authenticated and post.author.followers.filter_by(follower_id=current_user.id).first() %}
+        <div id="follow-section-content">
+          {% include "follow-section.html" %}
+        </div>
+        {% endif %}
+      </div>
+
+      <section id="comment-section" class="comment-section">
+      </section>
+
+      <div class="comment-form">
+        <form
+          id="comment-form"
+          hx-post="{{ url_for('comments.add_comment', post_id=post.id) }}"
+          hx-target="#comment-section"
+          hx-swap="afterbegin"
+          hx-on::after-request="this.reset()"
+        >
+          <div class="comment-input-row">
+            <textarea name="content" class="input" rows="1" placeholder="Write a comment..." required></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="bi bi-send"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </article>
+</main>
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/content.js') }}"></script>
+{% endblock %}
 {% endblock %}

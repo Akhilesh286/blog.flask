@@ -1,13 +1,5 @@
 {% for reply in replies %}
-    {% include "comments/reply-item.html" %}
+  {% with comment=reply, depth=depth|default(1), is_last=loop.last %}
+    {% include 'comments/comment-item.html' %}
+  {% endwith %}
 {% endfor %}
-
-{% if replies|length == 10 %}
-<button
-    hx-get="{{ url_for('comments.load_replies', comment_id=comment_id, offset=next_offset) }}"
-    hx-target="this"
-    hx-swap="outerHTML"
->
-    Show more replies
-</button>
-{% endif %}

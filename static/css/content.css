@@ -1,71 +1,388 @@
-@import url(style.css);
-
-.container {
-    display: flex;
-    gap: var(--gap-xl);
+.content-layout {
+  display: flex;
+  justify-content: center;
 }
 
-.cnt {
-    padding: var(--space-lg);
-    margin-top: var(--space-xl);
-    width: 100%;
+.content-main {
+  max-width: 760px;
+  width: 100%;
 }
-.cnt-tit h3{
-    color: var(--text-title);
+
+.content-header {
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--foreground);
+}
+
+.content-title {
+  font-family: var(--font-family-secondary);
+  font-size: calc(var(--font-size-title) * 1.25);
+  color: var(--text-title);
+  line-height: 1.2;
+  margin-bottom: var(--space-sm);
+}
+
+.content-desc {
+  color: var(--text-subtitle);
+  font-size: var(--font-size-subtitle);
+  line-height: 1.5;
+  margin-bottom: var(--space-md);
+}
+
+.content-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+  flex-wrap: wrap;
+}
+
+.content-author {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  color: var(--text-subtitle);
+  font-size: var(--font-size-body);
+  text-decoration: none;
+}
+.content-author:hover {
+  color: var(--color-primary);
+}
+
+.content-date {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  color: var(--text-disabled);
+  font-size: var(--font-size-caption);
+}
+
+.content-body {
+  color: var(--text-subtitle);
+  font-size: var(--font-size-body);
+  line-height: 1.8;
+  margin-bottom: var(--space-2xl);
+}
+.content-body h1, .content-body h2, .content-body h3,
+.content-body h4, .content-body h5, .content-body h6 {
+  color: var(--text-title);
+  font-family: var(--font-family-secondary);
+  margin: 1.5em 0 0.5em;
+}
+.content-body h1 { font-size: var(--font-size-title); }
+.content-body h2 { font-size: var(--font-size-subtitle); }
+.content-body p { margin-bottom: 1em; }
+.content-body code {
+  background: var(--background-2extra);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+}
+.content-body pre {
+  background: var(--background-2extra);
+  border: 1px solid var(--foreground);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  overflow-x: auto;
+  margin-bottom: 1em;
+}
+.content-body pre code {
+  background: none;
+  padding: 0;
+}
+.content-body blockquote {
+  border-left: 3px solid var(--color-primary);
+  padding-left: var(--space-md);
+  margin: 1em 0;
+  color: var(--text-body);
+}
+.content-body a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+.content-body img {
+  max-width: 100%;
+  border-radius: var(--radius-lg);
+}
+.content-body ul, .content-body ol {
+  padding-left: var(--space-xl);
+  margin-bottom: 1em;
+}
+.content-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+.content-body th, .content-body td {
+  border: 1px solid var(--foreground);
+  padding: var(--space-xs) var(--space-sm);
+  text-align: left;
+}
+.content-body th {
+  background: var(--background-extra);
+  color: var(--text-title);
+}
+
+.content-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  padding: var(--space-md) 0;
+  border-top: 1px solid var(--foreground);
+  border-bottom: 1px solid var(--foreground);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.comment-section {
+  margin-bottom: var(--space-lg);
+}
+
+.comment-form {
+  margin-bottom: var(--space-2xl);
+}
+
+.comment-input-row {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+}
+.comment-input-row textarea {
+  flex: 1;
+  min-height: 2.5rem;
+  resize: none;
+}
+
+/* ── Reddit-style nested threads ──────────────────── */
+.comment-tree {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Each thread is a horizontal row: indent gutter + main content */
+.thread {
+  display: flex;
+  position: relative;
+}
+
+/* ── Indent gutter (24px per level) ─────────────── */
+.thread-indent {
+  position: relative;
+  width: 24px;
+  min-width: 24px;
+  flex-shrink: 0;
+}
+
+/* Vertical guide line: runs full height of the thread */
+.thread-line {
+  position: absolute;
+  left: calc(12px - 1px);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Branch connector: horizontal line from the guide to the body */
+.thread-branch {
+  position: absolute;
+  left: calc(12px - 1px);
+  top: 1.25rem;
+  width: calc(12px + 2px);
+  height: 2px;
+  opacity: 0.4;
+  pointer-events: none;
+  background: var(--foreground);
+}
+
+/* Last-child: cut the vertical line at the branch point */
+.thread-last > .thread-indent > .thread-line {
+  height: 1.25rem;
+  bottom: auto;
+}
+
+/* Collapse button sits over the gutter */
+.thread-collapse-btn {
+  position: absolute;
+  left: 0;
+  top: 0.25rem;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-disabled);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  z-index: 2;
+  border-radius: 50%;
+  transition: all 0.15s;
+  opacity: 0.4;
+}
+.thread:hover .thread-collapse-btn {
+  opacity: 0.7;
+}
+.thread-collapse-btn:hover {
+  opacity: 1 !important;
+  color: var(--text-title);
+  background: var(--foreground);
+}
+
+/* ── Main content area ──────────────────────────── */
+.thread-main {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-xxs) var(--space-sm) var(--space-xs);
+  border-radius: var(--radius-md);
+  transition: background 0.15s;
+  position: relative;
+}
+
+.thread-header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  margin-bottom: 2px;
+  flex-wrap: wrap;
+}
+
+.thread-author {
+  color: var(--text-title);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-subtitle);
+  text-decoration: none;
+}
+.thread-author:hover {
+  text-decoration: underline;
+}
+
+.thread-time {
+  color: var(--text-disabled);
+  font-size: var(--font-size-disabled);
+}
+
+.thread-content {
+  color: var(--text-body);
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+  margin-bottom: var(--space-xxs);
+  word-wrap: break-word;
+}
+
+.thread-actions {
+  display: flex;
+  gap: var(--gap-xs);
+  align-items: center;
+}
+
+.thread-action {
+  background: none;
+  border: none;
+  color: var(--text-disabled);
+  font-size: var(--font-size-caption);
+  font-family: var(--font-family-primary);
+  cursor: pointer;
+  padding: 2px var(--space-xs);
+  border-radius: var(--radius-sm);
+  transition: all 0.1s;
+}
+.thread-action:hover {
+  color: var(--text-subtitle);
+  background: var(--foreground);
+}
+
+/* ── Children container ─────────────────────────── */
+.thread-children {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.35s ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.thread-reply-form {
+  margin-top: var(--space-xs);
+}
+
+.reply-form {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  margin-top: var(--space-xs);
+  padding: var(--space-xs) 0;
+}
+.reply-form textarea {
+  flex: 1;
+  min-height: 2.5rem;
+  resize: none;
+  font-size: var(--font-size-caption);
+}
+
+/* ── Collapsed state ────────────────────────────── */
+.thread.collapsed > .thread-main > .thread-children {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.thread-collapsed-preview {
+  padding: var(--space-xxs) 0;
+}
+
+.thread-expand-btn {
+  background: none;
+  border: none;
+  color: var(--text-disabled);
+  cursor: pointer;
+  font-size: var(--font-size-caption);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--space-xs);
+  border-radius: var(--radius-sm);
+  transition: all 0.1s;
+}
+.thread-expand-btn:hover {
+  color: var(--text-subtitle);
+  background: var(--foreground);
+}
+.thread-expand-btn i {
+  font-size: 13px;
+}
+
+.thread-collapsed-count {
+  color: inherit;
+}
+
+/* ── Mobile ─────────────────────────────────────── */
+@media (max-width: 640px) {
+  .thread-indent {
+    width: 20px;
+    min-width: 20px;
+  }
+  .thread-line {
+    left: calc(10px - 1px);
+  }
+  .thread-branch {
+    left: calc(10px - 1px);
+    width: calc(10px + 2px);
+  }
+  .thread-collapse-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .content-title {
     font-size: var(--font-size-title);
-    font-family: var(--font-family-secondary)
-}
-.cnt-tit h4 {
-    color: var(--text-subtitle);
-    font-size: var(--font-size-subtitle);
-}
-.cnt-tit h6 {
-    color: var(--color-info);
-    font-size: var(--font-size-body);
-}
-
-
-.author-action {
-    display: flex;
-    align-items: center;
-    margin: var(--space-md) 0;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.profile-pic {
-    width: 48px;
-    border-radius: var(--radius-full);
-    aspect-ratio: 1;
-    object-fit: cover;
-}
-
-.author-data {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-md);
-    border: var(--border-primary) 1px solid;
-    width: 20rem;
-    padding: var(--space-xs);
-}
-.author-data p {
-    margin: 0;
-}
-.content {
-    margin: var(--space-2xl) var(--space-2xl) 0 var(--space-2xl);
-    color: var(--text-title);
-}
-
-.action-row {
-    display: flex;
-    gap: var(--gap-md);
-}
-
-.action-btns {
-    display: flex;
-    align-items: center;
-}
-
-.follow-btn {
-    margin-left: auto;
+  }
+  .content-actions {
+    gap: var(--gap-sm);
+  }
 }

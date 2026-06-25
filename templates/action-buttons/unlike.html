@@ -1,1 +1,9 @@
-<button>Unlike</button>
+<button
+  hx-post="/posts/{{ post.id }}/like"
+  hx-trigger="click"
+  hx-target="#like-section"
+  hx-swap="innerHTML"
+  class="btn btn-sm btn-ghost"
+>
+  <i class="bi bi-heartbreak"></i> Unlike
+</button>

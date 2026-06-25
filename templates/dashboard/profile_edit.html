@@ -1,0 +1,77 @@
+<div class="dash-page">
+  <h2><i class="bi bi-person"></i> Edit Profile</h2>
+
+  <div class="post-card" style="max-width:480px">
+    <form action="/dashboard/profile" method="POST" enctype="multipart/form-data" class="auth-form">
+      <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:var(--space-lg)">
+        <div style="position:relative;display:inline-block">
+          <img
+            class="avatar avatar-xl"
+            id="profilePreview"
+            {% if profile and profile.pic %}
+            src="{{ url_for('media', filename='uploads/' ~ profile.pic) }}"
+            {% else %}
+            src="{{ url_for('static', filename='images/prf.jpeg') }}"
+            {% endif %}
+            alt="Profile"
+          >
+          <label for="pic" class="avatar-upload-btn" title="Change photo">
+            <i class="bi bi-camera"></i>
+          </label>
+        </div>
+        <input type="file" name="pic" id="pic" accept="image/*" style="display:none">
+      </div>
+
+      <div class="field">
+        <label for="first_name">First Name</label>
+        <input type="text" name="first_name" id="first_name" class="input" placeholder="First name" value="{{ profile.first_name if profile else '' }}" required>
+      </div>
+      <div class="field">
+        <label for="last_name">Last Name</label>
+        <input type="text" name="last_name" id="last_name" class="input" placeholder="Last name (optional)" value="{{ profile.last_name if profile else '' }}">
+      </div>
+      <div class="field">
+        <label for="bio">Bio</label>
+        <textarea name="bio" id="bio" class="input" rows="4" placeholder="Tell us about yourself">{{ profile.bio if profile else '' }}</textarea>
+      </div>
+      <div class="field">
+        <label for="website">Website</label>
+        <input type="url" name="website" id="website" class="input" placeholder="https://yoursite.com" value="{{ profile.website if profile else '' }}">
+      </div>
+      <button type="submit" class="btn btn-primary btn-sm" style="width:100%;margin-top:var(--space-sm)">
+        <i class="bi bi-check-lg"></i> Save Changes
+      </button>
+    </form>
+  </div>
+</div>
+
+<style>
+.avatar-upload-btn {
+  position: absolute !important;
+  bottom: 0;
+  right: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-round);
+  background: var(--color-primary);
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid var(--background);
+  font-size: 0.9rem;
+}
+.avatar-upload-btn:hover {
+  background: var(--border-hover);
+}
+</style>
+
+<script>
+document.getElementById("pic")?.addEventListener("change", function (e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const img = document.getElementById("profilePreview");
+  img.src = URL.createObjectURL(file);
+});
+</script>

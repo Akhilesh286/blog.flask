@@ -1,27 +1,23 @@
-<div class="post-actions">
+{% set already_liked = post.likes.filter_by(user_id=current_user.id).first() %}
 
-    {% set already_liked = post.likes.filter_by(user_id=current_user.id).first() %}
-
-    {% if already_liked %}
-        <button
-            hx-post="/posts/{{ post.id }}/like"
-            hx-trigger="click"
-            hx-target="#like-section"
-            hx-swap="innerHTML"
-            class="liked-btn"
-        >
-            {{ post.likes.count() }} Liked ✔
-        </button>
-    {% else %}
-        <button
-            hx-post="/posts/{{ post.id }}/like"
-            hx-trigger="click"
-            hx-target="#like-section"
-            hx-swap="innerHTML"
-            class="like-btn"
-        >
-            {{ post.likes.count() }} Like ❤️
-        </button>
-    {% endif %}
-
-</div>
+{% if already_liked %}
+<button
+  hx-post="/posts/{{ post.id }}/like"
+  hx-trigger="click"
+  hx-target="#like-section"
+  hx-swap="innerHTML"
+  class="btn btn-sm btn-primary"
+>
+  <i class="bi bi-heart-fill"></i> {{ post.likes.count() }}
+</button>
+{% else %}
+<button
+  hx-post="/posts/{{ post.id }}/like"
+  hx-trigger="click"
+  hx-target="#like-section"
+  hx-swap="innerHTML"
+  class="btn btn-sm btn-ghost"
+>
+  <i class="bi bi-heart"></i> {{ post.likes.count() }}
+</button>
+{% endif %}

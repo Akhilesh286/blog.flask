@@ -1,1 +1,22 @@
-Default screen 
+<div class="dash-page">
+  <div class="dash-card-grid">
+    <div class="dash-stat-card">
+      <span class="stat-value">{{ current_user.posts.filter_by(status='published').count() }}</span>
+      <span class="stat-label">Published</span>
+    </div>
+    <div class="dash-stat-card">
+      <span class="stat-value">{{ current_user.posts.filter_by(status='draft').count() }}</span>
+      <span class="stat-label">Drafts</span>
+    </div>
+    <div class="dash-stat-card">
+      <span class="stat-value">{{ current_user.followers.count() }}</span>
+      <span class="stat-label">Followers</span>
+    </div>
+    <div class="dash-stat-card">
+      <span class="stat-value">{{ current_user.following.count() }}</span>
+      <span class="stat-label">Following</span>
+    </div>
+  </div>
+
+  <p style="color:var(--text-disabled);font-size:var(--font-size-caption);">Select a section from the sidebar to manage your content.</p>
+</div>
